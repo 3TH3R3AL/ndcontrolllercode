@@ -261,7 +261,7 @@ class MHV4():
             
             time.sleep(RAMP_INTERVAL)
 
-mhv1 = MHV4("/dev/ttyUSB4",9600,[50,50,50,50],[40,40,40,40],2.5)
+mhv1 = MHV4("/dev/ttyUSB4",9600,[50,50,50,50],2.5)
 mhv1.set_on(1)
 mhv1.ramp_up()
 
