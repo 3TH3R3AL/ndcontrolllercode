@@ -23,6 +23,7 @@ LOCK_PATH = '/tmp/'
 class MHV4():
 	def __init__(self,port,baud,voltage_limits,current_limits,ramp_rate):
 		lock_file = '.mhv4lib.'+port[4:]+'.lock'
+		print(lock_file)
 		self.lock = LockFile(LOCK_PATH + lock_file)
 		try:
 			if not self.lock.acquire(timeout=LOCK_TIMEOUT):
@@ -257,5 +258,5 @@ class MHV4():
 			time.sleep(RAMP_INTERVAL)
 
 mhv1 = MHV4("/dev/ttyUSB4",9600,[50,50,50,50],[40,40,40,40],2.5)
-
+mhv1.set_on(1)
 mhv1.ramp_up(1)
