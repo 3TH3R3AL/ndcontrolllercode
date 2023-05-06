@@ -17,7 +17,7 @@ from lockfile import LockFile
 
 VOLTAGE_LIMIT = 100
 LOCK_TIMEOUT = 5
-RAMP_INTERVAL = 0.05
+RAMP_INTERVAL = 1
 LOCK_PATH = '/tmp/'
 
 class MHV4():
@@ -56,7 +56,7 @@ class MHV4():
         """The function sends a command to the unit and returns the response string.
 
         """
-        #print("sent command '",command,"'")
+        print("sent command '",command,"'")
         if command == '': return ''
         self.ser.write( bytes(command, 'utf8') ) # works better with older Python3 versions (<3.5)
         time.sleep(0.1)
