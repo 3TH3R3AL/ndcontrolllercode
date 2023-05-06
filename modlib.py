@@ -56,9 +56,10 @@ class MHV4():
         """The function sends a command to the unit and returns the response string.
 
         """
-        print("sent command '",command,"'",sep="")
+        command += +"\r"
+        print("sent command '",bytes(command, 'utf8'),"'",sep="")
         if command == '': return ''
-        self.ser.write( bytes(command+"\r", 'utf8') ) # works better with older Python3 versions (<3.5)
+        self.ser.write( bytes(command, 'utf8') ) # works better with older Python3 versions (<3.5)
         time.sleep(0.1)
         self.ser.readline() # read out echoed command
         return self.ser.readline() # return response from the unit
@@ -262,8 +263,12 @@ class MHV4():
             time.sleep(RAMP_INTERVAL)
 
 mhv1 = MHV4("/dev/ttyUSB4",9600,[50,50,50,50],2.5)
-print(mhv1.send_command('?'))
+mhv1.send_command('?')
 
-#mhv1.set_on(1)
-#mhv1.ramp_up(1)
+for i in range(0,100):
+    print(mhv1.ser.read(10),sep="",end='')
+
+
+mhv1.set_on(1)
+mhv1.ramp_up(1)
 
