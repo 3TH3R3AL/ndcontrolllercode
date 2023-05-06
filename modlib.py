@@ -22,25 +22,25 @@ LOCK_PATH = '/tmp/'
 
 class MHV4():
     def __init__(self,port,baud,voltage_limits,current_limits,ramp_rate):
-        lock_file = '.mhv4lib.'+port[4:]+'.lock'
-        print(lock_file)
-        self.lock = LockFile(LOCK_PATH + lock_file)
-        try:
-            if not self.lock.acquire(timeout=LOCK_TIMEOUT):
-                raise Exception()
-            if self.lock.is_locked():
-                print('Lockfile acquired successfully: ' + LOCK_PATH + lock_file )
-                self.port = port
-                self.voltage_limits = voltage_limits
-                self.current_limits = current_limits
-                self.ramp_rate = ramp_rate
-                self.ser = serial.Serial( port=self.port, baudrate=baud, timeout=1 )
-                time.sleep(0.1) # Wait 100 ms after opening the port before sending commands
-                self.ser.flushInput() # Flush the input buffer of the serial port before sending any new commands
-                time.sleep(0.1)
-        except Exception as e:
-            print('Lockfile could not be acquired for port ' + port)
-            print('Is there another program using mhv4lib ??')
+        #lock_file = '.mhv4lib.'+port[4:]+'.lock'
+        #print(lock_file)
+        #self.lock = LockFile(LOCK_PATH + lock_file)
+        #try:
+            #if not self.lock.acquire(timeout=LOCK_TIMEOUT):
+             #   raise Exception()
+            #if self.lock.is_locked():
+             #   print('Lockfile acquired successfully: ' + LOCK_PATH + lock_file )
+        self.port = port
+        self.voltage_limits = voltage_limits
+        self.current_limits = current_limits
+        self.ramp_rate = ramp_rate
+        self.ser = serial.Serial( port=self.port, baudrate=baud, timeout=1 )
+        time.sleep(0.1) # Wait 100 ms after opening the port before sending commands
+        self.ser.flushInput() # Flush the input buffer of the serial port before sending any new commands
+        time.sleep(0.1)
+        #except Exception as e:
+         #   print('Lockfile could not be acquired for port ' + port)
+          #  print('Is there another program using mhv4lib ??')
 
 
 
@@ -49,7 +49,8 @@ class MHV4():
 
         """
         self.ser.close()
-        self.lock.release()
+        #:with expression as target:
+            pass.lock.release()
 
     def send_command(self, command=''):
         """The function sends a command to the unit and returns the response string.
