@@ -56,7 +56,7 @@ class MHV4():
         """The function sends a command to the unit and returns the response string.
 
         """
-        command += +"\r"
+        command += "\r"
         print("sent command '",bytes(command, 'utf8'),"'",sep="")
         if command == '': return ''
         self.ser.write( bytes(command, 'utf8') ) # works better with older Python3 versions (<3.5)
