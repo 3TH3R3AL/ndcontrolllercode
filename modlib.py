@@ -50,7 +50,7 @@ class MHV4():
         """
         self.ser.close()
         #:with expression as target:
-            pass.lock.release()
+            #pass.lock.release()
 
     def send_command(self, command=''):
         """The function sends a command to the unit and returns the response string.
