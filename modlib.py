@@ -21,7 +21,7 @@ RAMP_INTERVAL = 0.05
 LOCK_PATH = '/tmp/'
 
 class MHV4():
-    def __init__(self,port,baud,voltage_limits,current_limits,ramp_rate):
+    def __init__(self,port,baud,voltage_limits,ramp_rate):
         #lock_file = '.mhv4lib.'+port[4:]+'.lock'
         #print(lock_file)
         #self.lock = LockFile(LOCK_PATH + lock_file)
@@ -32,12 +32,12 @@ class MHV4():
              #   print('Lockfile acquired successfully: ' + LOCK_PATH + lock_file )
         self.port = port
         self.voltage_limits = voltage_limits
-        self.current_limits = current_limits
         self.ramp_rate = ramp_rate
         self.ser = serial.Serial( port=self.port, baudrate=baud, timeout=1 )
         time.sleep(0.1) # Wait 100 ms after opening the port before sending commands
         self.ser.flushInput() # Flush the input buffer of the serial port before sending any new commands
         time.sleep(0.1)
+        self.send_command("C1")
         #except Exception as e:
          #   print('Lockfile could not be acquired for port ' + port)
           #  print('Is there another program using mhv4lib ??')
@@ -56,6 +56,7 @@ class MHV4():
         """The function sends a command to the unit and returns the response string.
 
         """
+        #print("sent command '",command,"'")
         if command == '': return ''
         self.ser.write( bytes(command, 'utf8') ) # works better with older Python3 versions (<3.5)
         time.sleep(0.1)
@@ -75,7 +76,7 @@ class MHV4():
         """
 
         if channel not in [0,1,2,3,4]: return
-        response = self.send_command( 'ON %d\r' % channel )
+        response = self.send_command( 'ON%d\r' % channel )
 
     def set_off(self,channel):
         """The function turns the voltage OFF for the given ``channel`` number.
@@ -85,7 +86,7 @@ class MHV4():
         """
 
         if channel not in [0,1,2,3,4]: return
-        response = self.send_command( 'OFF %d\r' % channel )
+        response = self.send_command( 'OFF%d\r' % channel )
 
     def get_voltage(self,channel):
         """The function returns the measured voltage reading of the given ``channel`` number.
@@ -97,7 +98,7 @@ class MHV4():
         :param channel: The channel number of which the voltage reading is requested.
                         The return value is positive or negative depending on the set polarity.
         """
-        response = self.send_command( 'RU %d\r' % channel )
+        response = self.send_command( 'U%d\r' % channel )
         linestr = response.decode('utf8')
         pattern = re.match(r'.*([+-])(\d*.\d*)', linestr, re.IGNORECASE)
 
@@ -177,7 +178,8 @@ class MHV4():
         :param limit: The current limit value that is to be set for the channel in units of nA.
         """
 
-        self.current_limits[channel] = limit
+        response = self.send_command( 'Tn %d %d\r' % (channel, limit) )
+        return response.decode('utf8')
 
     def set_voltage_limit(self,channel, limit):
         """The function sets the voltage limit of the given ``channel`` number
@@ -224,7 +226,7 @@ class MHV4():
             if(voltage > maximum):
                 voltage = maximum
             
-            response = self.send_command( 'SP %d %d\r' % (channel, voltage) )
+            response = self.send_command( 'S%d %d\r' % (channel, voltage) )
             if(voltage == maximum):
                 break
             
@@ -236,11 +238,12 @@ class MHV4():
             voltage -= interval
             if(voltage < 0):
                 voltage = 0
-            response = self.send_command( 'SP %d %d\r' % (channel, voltage) )
+            response = self.send_command( 'S%d %d\r' % (channel, voltage) )
             if(voltage == 0):
                 break
             
             time.sleep(RAMP_INTERVAL)
+        
     def ramp_to(self,channel,target_voltage):
         voltage = self.get_voltage()
         if(voltage == target_voltage):
@@ -252,7 +255,7 @@ class MHV4():
             if(voltage*direction > target_voltage*direction):
                 voltage = target_voltage
             
-            response = self.send_command( 'SP %d %d\r' % (channel, voltage) )
+            response = self.send_command( 'S%d %d\r' % (channel, voltage) )
             if(voltage == target_voltage):
                 break
             
@@ -260,4 +263,5 @@ class MHV4():
 
 mhv1 = MHV4("/dev/ttyUSB4",9600,[50,50,50,50],[40,40,40,40],2.5)
 mhv1.set_on(1)
+mhv1.ramp_up()
 
