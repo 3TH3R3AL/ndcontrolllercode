@@ -37,7 +37,7 @@ class MHV4():
         time.sleep(0.1) # Wait 100 ms after opening the port before sending commands
         self.ser.flushInput() # Flush the input buffer of the serial port before sending any new commands
         time.sleep(0.1)
-        self.send_command("C1")
+        #self.send_command("C1")
         #except Exception as e:
          #   print('Lockfile could not be acquired for port ' + port)
           #  print('Is there another program using mhv4lib ??')
@@ -263,9 +263,9 @@ class MHV4():
             time.sleep(RAMP_INTERVAL)
 
 mhv1 = MHV4("/dev/ttyUSB4",9600,[50,50,50,50],2.5)
-mhv1.send_command('?')
+#mhv1.send_command('?')
 
 
 mhv1.set_on(1)
-mhv1.ramp_up(1)
+#mhv1.ramp_up(1)
 
