@@ -265,9 +265,6 @@ class MHV4():
 mhv1 = MHV4("/dev/ttyUSB4",9600,[50,50,50,50],2.5)
 mhv1.send_command('?')
 
-for i in range(0,100):
-    print(mhv1.ser.read(10),sep="",end='')
-
 
 mhv1.set_on(1)
 mhv1.ramp_up(1)
