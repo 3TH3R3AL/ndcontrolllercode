@@ -236,7 +236,7 @@ Not Yet Implemented
         response = self.send_command(channel=channel,command='SET',parameter='RDW',value=rate,format="{value:0>3d}")
         print("Response RDW: ",response)
 
-caen = Caen("/dev/ttyUSB4",9600,[50,50,50,50],2.5)
+caen = Caen("/dev/ttyUSB0",9600,[50,50,50,50],2.5)
 #mhv1.send_command('?')
 ##
 
