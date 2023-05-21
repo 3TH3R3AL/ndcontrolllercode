@@ -1,7 +1,8 @@
 #! /bin/python
-import serial
-import time
 import re
+import time
+
+import serial
 
 VOLTAGE_LIMIT = 100
 LOCK_TIMEOUT = 5
@@ -10,7 +11,7 @@ RAMP_INTERVAL = 1
 COMMAND_STRING = "$BD:00,CMD:{CMD},CH:{CH},PAR:{PAR}{VAL}\r\n"
 LOCK_PATH = '/tmp/'
 
-class MHV4():
+class Caen():
     def __init__(self,port,baud,voltage_limits,ramp_rate):
         self.port = port
         self.voltage_limits = voltage_limits
@@ -233,10 +234,10 @@ Not Yet Implemented
         response = self.send_command(channel=channel,command='SET',parameter='RDW',value=rate,format="{value:0>3d}")
         print("Response RDW: ",response)
 
-mhv1 = MHV4("/dev/ttyUSB4",9600,[50,50,50,50],2.5)
+caen = Caen("/dev/ttyUSB4",9600,[50,50,50,50],2.5)
 #mhv1.send_command('?')
 ##
 
-mhv1.set_on(1)
+caen.set_on(1)
 #mhv1.ramp_up(1)
 
