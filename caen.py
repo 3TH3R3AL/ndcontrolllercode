@@ -42,7 +42,7 @@ class Caen():
         self.ser.write( bytes(COMMAND_STRING.format(CMD = command, CH = channel, PAR = parameter, VAL = value), 'utf8') ) # works better with older Python3 versions (<3.5)
         time.sleep(0.1)
         print("cmd:",self.ser.readline()) # read out echoed command
-        returnVal = self.ser.readline()
+        returnVal = self.ser.readline().decode()
         print(type(returnVal))
         if("ERR" in returnVal):
             print("Error: ",returnVal)
