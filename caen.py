@@ -41,9 +41,8 @@ class Caen():
         print("sent command '",bytes(COMMAND_STRING.format(CMD = command, CH = channel, PAR = parameter, VAL = value), 'utf8'),"'",sep="")
         self.ser.write( bytes(COMMAND_STRING.format(CMD = command, CH = channel, PAR = parameter, VAL = value), 'utf8') ) # works better with older Python3 versions (<3.5)
         time.sleep(0.1)
-        print("cmd:",self.ser.readline()) # read out echoed command
         returnVal = self.ser.readline().decode()
-        print(type(returnVal))
+        print("returned: ",returnVal)
         if("ERR" in returnVal):
             print("Error: ",returnVal)
             raise Exception(returnVal)
@@ -87,7 +86,7 @@ class Caen():
         """
         response = self.send_command(channel=channel,command='MON',parameter='VMON')
         print(response)
-        linestr = response.decode('utf8')
+        linestr = response
         pattern = re.match(r'.*([+-])(\d*.\d*)', linestr, re.IGNORECASE)
 
         if pattern is not None:
@@ -107,7 +106,7 @@ class Caen():
                         The return value is positive regardless of what the polarity is set to.
         """
         response = self.send_command(channel=channel,command='MON',parameter='MAXV')
-        linestr = response.decode('utf8')
+        linestr = response
         pattern = re.match(r'.*([+-])(\d*.\d*)', linestr, re.IGNORECASE)
 
         if pattern is not None:
@@ -120,7 +119,7 @@ class Caen():
 
     def get_current(self,channel):
         response = self.send_command(channel=channel,command='MON',parameter='IMON')
-        linestr = response.decode('utf8')
+        linestr = response
         pattern = re.match(r'.*([+-])(\d*.\d*)', linestr, re.IGNORECASE)
 
         if pattern is not None:
@@ -155,7 +154,7 @@ Not Yet Implemented
     def get_ramp(self,channel):
         response = self.send_command(channel=channel,command='MON',parameter='RUP')
         print(response)
-        linestr = response.decode('utf8')
+        linestr = response
         pattern = re.match(r'.*([+-])(\d*.\d*)', linestr, re.IGNORECASE)
 
         if pattern is not None:
@@ -177,7 +176,7 @@ Not Yet Implemented
 
         # MHV-4 protocol expects voltage in 0.1 V units
         response = self.send_command(channel=channel,command='SET',parameter='VSET',value=voltage,format="{value:06.1f}")
-        return response.decode('utf8')
+        return response
     '''
     def set_current_limit(self,channel, limit):
         """The function sets the current limit of the given ``channel`` number
@@ -219,7 +218,7 @@ Not Yet Implemented
         :param pol: The desired polarity of the voltage for the channel 0 or 1.
         """
         response = self.send_command(channel=channel,command='SET',parameter='MAXV')
-        return response.decode('utf8')
+        return response
 
     def set_ramp_up(self, channel, rate):
         """The function sets the ramp speed of the whole unit.
@@ -241,6 +240,6 @@ Not Yet Implemented
 caen = Caen("/dev/ttyUSB0",9600,[50,50,50,50],2.5)
 #mhv1.send_command('?')
 ##
-caen.get_voltage(1)
+caen.get_voltage(3)
 #mhv1.ramp_up(1)
 
