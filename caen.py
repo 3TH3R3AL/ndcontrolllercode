@@ -111,13 +111,13 @@ class Caen():
         :param channel: The channel number of which the voltage reading is requested.
                         The return value is positive or negative depending on the set polarity.
         """
-        response = self.send_command(channel=-1,command='MON',parameter='VSET')
+        response = self.send_command(channel=-1,command='MON',parameter='BDSNUM')
         print(response)
         linestr = response
-        pattern = re.match(r'.*VAL:(\d*.\d*)', linestr, re.IGNORECASE)
+        pattern = re.match(r'.*VAL:(\d*)', linestr, re.IGNORECASE)
 
         if pattern is not None:
-            voltage = float(pattern.group(1))
+            voltage = int(pattern.group(1))
             return voltage
         else :
             return 0.
@@ -264,6 +264,6 @@ Not Yet Implemented
 caen = Caen("/dev/ttyUSB0",9600,[50,50,50,50],2.5)
 #mhv1.send_command('?')
 ##
-print(caen.get_voltage(3))
+print(caen.get_serial_number())
 #mhv1.ramp_up(1)
 
