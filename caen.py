@@ -8,7 +8,7 @@ VOLTAGE_LIMIT = 100
 LOCK_TIMEOUT = 5
 RAMP_INTERVAL = 1
 # From Manual: $BD:**,CMD:***,CH*,PAR:***,VAL:***.**<CR, LF >
-COMMAND_STRING = "$BD:00,CMD:{CMD},CH:{CH},PAR:{PAR}{VAL}\r\n"
+COMMAND_STRING = "$BD:0,CMD:{CMD},CH:{CH},PAR:{PAR}{VAL}\r\n"
 LOCK_PATH = '/tmp/'
 
 class Caen():
@@ -36,12 +36,14 @@ class Caen():
 
         if(format != ''):
             value = ',VAL:{value}'.format(value = format.format(value=value))
+        else:
+            value = ''
         print("sent command '",bytes(COMMAND_STRING.format(CMD = command, CH = channel, PAR = parameter, VAL = value), 'utf8'),"'",sep="")
-        self.ser.write( bytes(command, 'utf8') ) # works better with older Python3 versions (<3.5)
+        self.ser.write( bytes(COMMAND_STRING.format(CMD = command, CH = channel, PAR = parameter, VAL = value), 'utf8') ) # works better with older Python3 versions (<3.5)
         time.sleep(0.1)
-        print("cmd:",self.ser.readline(
-        )) # read out echoed command
+        print("cmd:",self.ser.readline()) # read out echoed command
         returnVal = self.ser.readline()
+        print(type(returnVal))
         if("ERR" in returnVal):
             print("Error: ",returnVal)
             raise Exception(returnVal)
@@ -239,7 +241,6 @@ Not Yet Implemented
 caen = Caen("/dev/ttyUSB0",9600,[50,50,50,50],2.5)
 #mhv1.send_command('?')
 ##
-
-caen.set_on(1)
+caen.get_voltage(1)
 #mhv1.ramp_up(1)
 
