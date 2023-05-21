@@ -84,10 +84,10 @@ class Caen():
         :param channel: The channel number of which the voltage reading is requested.
                         The return value is positive or negative depending on the set polarity.
         """
-        response = self.send_command(channel=channel,command='MON',parameter='VMON')
+        response = self.send_command(channel=channel,command='MON',parameter='VSET')
         print(response)
         linestr = response
-        pattern = re.match(r'.*([+-])(\d*.\d*)', linestr, re.IGNORECASE)
+        pattern = re.match(r'.*VAL:([+-])(\d*.\d*)', linestr, re.IGNORECASE)
 
         if pattern is not None:
             voltage = float(pattern.group(2))
