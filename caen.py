@@ -84,6 +84,7 @@ class Caen():
                         The return value is positive or negative depending on the set polarity.
         """
         response = self.send_command(channel=channel,command='MON',parameter='VMON')
+        print(response)
         linestr = response.decode('utf8')
         pattern = re.match(r'.*([+-])(\d*.\d*)', linestr, re.IGNORECASE)
 
@@ -151,6 +152,7 @@ Not Yet Implemented
 
     def get_ramp(self,channel):
         response = self.send_command(channel=channel,command='MON',parameter='RUP')
+        print(response)
         linestr = response.decode('utf8')
         pattern = re.match(r'.*([+-])(\d*.\d*)', linestr, re.IGNORECASE)
 
