@@ -87,12 +87,10 @@ class Caen():
         response = self.send_command(channel=channel,command='MON',parameter='VSET')
         print(response)
         linestr = response
-        pattern = re.match(r'.*VAL:([+-])(\d*.\d*)', linestr, re.IGNORECASE)
+        pattern = re.match(r'.*VAL:(\d*.\d*)', linestr, re.IGNORECASE)
 
         if pattern is not None:
-            voltage = float(pattern.group(2))
-            if pattern.group(1) == '-':
-                voltage = -voltage
+            voltage = float(pattern.group(1))
             return voltage
         else :
             return 0.
