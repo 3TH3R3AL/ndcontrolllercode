@@ -1,4 +1,4 @@
-
+#! /bin/python
 import serial
 import time
 import re
@@ -27,14 +27,14 @@ class MHV4():
         #:with expression as target:
             #pass.lock.release()
 
-    def send_command(self, command='', channel='', parameter='',value=''):
+    def send_command(self, command='', channel='', parameter='',format='',value=0):
         """The function sends a command to the unit and returns the response string.
 
         """
         if command == '' or channel == '': return ''
 
-        if(value != ''):
-            value = ',VAL:{value:.2f}'.format(value = value)
+        if(format != ''):
+            value = ',VAL:{value}'.format(value = format.format(value=value))
         print("sent command '",bytes(COMMAND_STRING.format(CMD = command, CH = channel, PAR = parameter, VAL = value), 'utf8'),"'",sep="")
         self.ser.write( bytes(command, 'utf8') ) # works better with older Python3 versions (<3.5)
         time.sleep(0.1)
@@ -171,7 +171,7 @@ Not Yet Implemented
             return
 
         # MHV-4 protocol expects voltage in 0.1 V units
-        response = self.send_command(channel=channel,command='SET',parameter='VSET',value=voltage)
+        response = self.send_command(channel=channel,command='SET',parameter='VSET',value=voltage,format="{value:06.1f}")
         return response.decode('utf8')
     '''
     def set_current_limit(self,channel, limit):
@@ -195,7 +195,7 @@ Not Yet Implemented
         :param limit: The voltage limit value that is to be set for the channel in units of Volts.
         """
         # MHV-4 protocol expects voltage in 0.1 V units
-        response = self.send_command(channel=channel,command='MON',parameter='MAXV')
+        response = self.send_command(channel=channel,command='SET',parameter='MAXV',value=limit,format="{value:07.2f}")
 
     def set_voltage_polarity(self,channel, pol):
         """The function sets the voltage polarity (negative/positive) for the given ``channel`` number.
@@ -213,58 +213,25 @@ Not Yet Implemented
         :param channel: The channel number that the polarity change is applied to.
         :param pol: The desired polarity of the voltage for the channel 0 or 1.
         """
-        response = self.send_command(channel=channel,command='MON',parameter='MAXV')
+        response = self.send_command(channel=channel,command='SET',parameter='MAXV')
         return response.decode('utf8')
 
-    def set_ramp(self, rate):
+    def set_ramp_up(self, channel, rate):
         """The function sets the ramp speed of the whole unit.
 
         :param n: The desired ramp speed option 
         """
         self.ramp_rate = rate 
-    def ramp_up(self,channel):
-        voltage = 0
-        interval = self.ramp_rate*RAMP_INTERVAL
-        maximum = self.voltage_limits[channel]
-        while True:
-            voltage += interval
-            if(voltage > maximum):
-                voltage = maximum
-            
-            response = self.send_command(channel=channel,command='MON',parameter='MAXV')
-            if(voltage == maximum):
-                break
-            
-            time.sleep(RAMP_INTERVAL)
-    def ramp_down(self,channel):
-        voltage = self.voltage_limits[channel]
-        interval = self.ramp_rate*RAMP_INTERVAL
-        while True:
-            voltage -= interval
-            if(voltage < 0):
-                voltage = 0
-            response = self.send_command(channel=channel,command='MON',parameter='MAXV')
-            if(voltage == 0):
-                break
-            
-            time.sleep(RAMP_INTERVAL)
-        
-    def ramp_to(self,channel,target_voltage):
-        voltage = self.get_voltage()
-        if(voltage == target_voltage):
-            return
-        direction = 1 if voltage < target_voltage else -1
-        interval = self.ramp_rate*RAMP_INTERVAL * direction
-        while True:
-            voltage += interval
-            if(voltage*direction > target_voltage*direction):
-                voltage = target_voltage
-            
-            response = self.send_command(channel=channel,command='MON',parameter='MAXV')
-            if(voltage == target_voltage):
-                break
-            
-            time.sleep(RAMP_INTERVAL)
+        response = self.send_command(channel=channel,command='SET',parameter='RUP',value=rate,format="{value:0>3d}")
+        print("Response RUP: ",response)
+    def set_ramp_down(self, channel, rate):
+        """The function sets the ramp speed of the whole unit.
+
+        :param n: The desired ramp speed option 
+        """
+        self.ramp_rate = rate 
+        response = self.send_command(channel=channel,command='SET',parameter='RDW',value=rate,format="{value:0>3d}")
+        print("Response RDW: ",response)
 
 mhv1 = MHV4("/dev/ttyUSB4",9600,[50,50,50,50],2.5)
 #mhv1.send_command('?')
