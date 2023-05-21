@@ -8,7 +8,6 @@ VOLTAGE_LIMIT = 100
 LOCK_TIMEOUT = 5
 RAMP_INTERVAL = 1
 # From Manual: $BD:**,CMD:***,CH*,PAR:***,VAL:***.**<CR, LF >
-COMMAND_STRING = "$BD:0,CMD:{CMD},CH:{CH},PAR:{PAR}{VAL}\r\n"
 LOCK_PATH = '/tmp/'
 
 class Caen():
@@ -33,13 +32,20 @@ class Caen():
 
         """
         if command == '' or channel == '': return ''
+        COMMAND_STRING = "$BD:0,CMD:{CMD},CH:{CH},PAR:{PAR}{VAL}\r\n"
 
         if(format != ''):
             value = ',VAL:{value}'.format(value = format.format(value=value))
         else:
             value = ''
-        print("sent command '",bytes(COMMAND_STRING.format(CMD = command, CH = channel, PAR = parameter, VAL = value), 'utf8'),"'",sep="")
-        self.ser.write( bytes(COMMAND_STRING.format(CMD = command, CH = channel, PAR = parameter, VAL = value), 'utf8') ) # works better with older Python3 versions (<3.5)
+        if(channel == -1):
+            COMMAND_STRING = "$BD:0,CMD:{CMD},PAR:{PAR}{VAL}\r\n"
+            print("sent command '",bytes(COMMAND_STRING.format(CMD = command, PAR = parameter), 'utf8'),"'",sep="")
+            self.ser.write( bytes(COMMAND_STRING.format(CMD = command, PAR = parameter), 'utf8') ) # works better with older Python3 versions (<3.5)
+
+        else:
+            print("sent command '",bytes(COMMAND_STRING.format(CMD = command, CH = channel, PAR = parameter, VAL = value), 'utf8'),"'",sep="")
+            self.ser.write( bytes(COMMAND_STRING.format(CMD = command, CH = channel, PAR = parameter, VAL = value), 'utf8') ) # works better with older Python3 versions (<3.5)
         time.sleep(0.1)
         returnVal = self.ser.readline().decode()
         print("returned: ",returnVal)
@@ -95,6 +101,26 @@ class Caen():
         else :
             return 0.
 
+    def get_serial_number(self):
+        """The function returns the measured voltage reading of the given ``channel`` number.
+        The possible channel numbers are 0,1,2,3.
+        Number 4 applies to ALL channels (not tested?).
+
+        Note: Returns always 0, if the channel is turned OFF !
+
+        :param channel: The channel number of which the voltage reading is requested.
+                        The return value is positive or negative depending on the set polarity.
+        """
+        response = self.send_command(channel=-1,command='MON',parameter='VSET')
+        print(response)
+        linestr = response
+        pattern = re.match(r'.*VAL:(\d*.\d*)', linestr, re.IGNORECASE)
+
+        if pattern is not None:
+            voltage = float(pattern.group(1))
+            return voltage
+        else :
+            return 0.
     def get_voltage_limit(self,channel):
         """
         The possible channel numbers are 0,1,2,3.
@@ -238,6 +264,6 @@ Not Yet Implemented
 caen = Caen("/dev/ttyUSB0",9600,[50,50,50,50],2.5)
 #mhv1.send_command('?')
 ##
-caen.get_voltage(3)
+print(caen.get_voltage(3))
 #mhv1.ramp_up(1)
 
