@@ -11,14 +11,29 @@ RAMP_INTERVAL = 1
 LOCK_PATH = '/tmp/'
 
 class Caen():
-    def __init__(self,port,baud,voltage_limits,ramp_rate):
-        self.port = port
+    def __init__(self,serial_number,baud,voltage_limits,ramp_rate):
+
+
+
+        self.port = '/dev/ttyUSB0'
         self.voltage_limits = voltage_limits
         self.ramp_rate = ramp_rate
         self.ser = serial.Serial( port=self.port, baudrate=baud, timeout=1 )
         time.sleep(0.1) # Wait 100 ms after opening the port before sending commands
         self.ser.flushInput() # Flush the input buffer of the serial port before sending any new commands
         time.sleep(0.1)
+        self.serial_number = self.get_serial_number()
+        i = 1
+        while self.serial_number != serial_number:
+            self.port = '/dev/ttyUSB' + str(i)
+            self.ser.close()
+            self.ser = serial.Serial( port=self.port, baudrate=baud, timeout=1 )
+            time.sleep(0.1) # Wait 100 ms after opening the port before sending commands
+            self.ser.flushInput()
+            time.sleep(0.1)
+            self.serial_number = self.get_serial_number()
+            i += 1
+
     def close(self):
         """The function closes and releases the serial port connection attached to the unit.
 
@@ -39,7 +54,7 @@ class Caen():
         else:
             value = ''
         if(channel == -1):
-            COMMAND_STRING = "$BD:0,CMD:{CMD},PAR:{PAR}{VAL}\r\n"
+            COMMAND_STRING = "$BD:0,CMD:{CMD},PAR:{PAR}\r\n"
             print("sent command '",bytes(COMMAND_STRING.format(CMD = command, PAR = parameter), 'utf8'),"'",sep="")
             self.ser.write( bytes(COMMAND_STRING.format(CMD = command, PAR = parameter), 'utf8') ) # works better with older Python3 versions (<3.5)
 
@@ -261,9 +276,14 @@ Not Yet Implemented
         response = self.send_command(channel=channel,command='SET',parameter='RDW',value=rate,format="{value:0>3d}")
         print("Response RDW: ",response)
 
-caen = Caen("/dev/ttyUSB0",9600,[50,50,50,50],2.5)
-#mhv1.send_command('?')
-##
-print(caen.get_serial_number())
-#mhv1.ramp_up(1)
+caen = Caen(1283,9600,[50,50,50,50],2.5)
 
+print(caen.get_serial_number())
+
+#https://www.youtube.com/playlist?list=PLB968815D7BB78F9C
+#https://learn.ni.com/learn/article/labview-tutorial
+# first test program as whole  
+# which power supply is which 
+# wednesday 3:30 if I want to 
+# tuesday the 30th 3:30
+# heartbeat function
