@@ -22,7 +22,7 @@ def fingerprint(port):
     
     
     response = []
-    for i in range(0,2):
+    for i in range(0,4):
         response.append(ser.readline().decode())
     
     if("?" not in response[0]):
