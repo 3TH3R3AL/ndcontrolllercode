@@ -14,8 +14,10 @@ def fingerprint(port):
                 bytes('?\r\n', "utf8")
             )
     response = ser.readline().decode()
+    print(port)
     print(response)
-
+    response = ser.readline().decode()
+    print(response)
 
 for i in range(0,5):
     port = '/dev/ttyUSB' + str(i)
