@@ -13,6 +13,7 @@ def fingerprint(port):
     ser = serial.Serial(port=port, baudrate=9600, timeout=1)
     time.sleep(0.1)
     ser.flushInput()
+    ser.flushOutput()
     time.sleep(0.1)
     ser.write(
                 bytes('?\r\n', "utf8")
@@ -20,7 +21,7 @@ def fingerprint(port):
     
     
     response = []
-    for i in range(0,4):
+    for i in range(0,2):
         response.append(ser.readline().decode())
     
     if("?" not in response[0]):
@@ -37,7 +38,8 @@ def fingerprint(port):
         ser.close()
     else:
         ret['type'] = "Unknown"
-
+    ser.flushInput()
+    time.sleep(0.1)
     return ret
 for i in range(0,5):
     port = '/dev/ttyUSB' + str(i)
