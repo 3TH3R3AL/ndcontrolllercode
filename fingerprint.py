@@ -39,8 +39,6 @@ def fingerprint(port):
         ser.close()
     else:
         ret['type'] = "Unknown"
-    ser.flushInput()
-    time.sleep(0.1)
     return ret
 for i in range(0,5):
     port = '/dev/ttyUSB' + str(i)
