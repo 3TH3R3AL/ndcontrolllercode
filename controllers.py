@@ -13,14 +13,14 @@ LOCK_PATH = "/tmp/"
 class Caen:
     def __init__(self, baud, **kwargs):
         # Kwargs include serial_number, port
-        self.port = kwargs['port'] if kwargs['port'] else "/dev/ttyUSB0"
+        self.port = kwargs['port'] if 'port' in kwargs else "/dev/ttyUSB0"
         self.ser = serial.Serial(port=self.port, baudrate=baud, timeout=1)
         time.sleep(0.1)  # Wait 100 ms after opening the port before sending commands
         self.ser.flushInput()  # Flush the input buffer of the serial port before sending any new commands
         time.sleep(0.1)
         self.serial_number = self.get_serial_number()
         i = 1
-        if(kwargs['serial_number']):
+        if('serial_number' in kwargs):
             while self.serial_number != kwargs["serial_number"]:
                 self.port = "/dev/ttyUSB" + str(i)
                 self.ser.close()
