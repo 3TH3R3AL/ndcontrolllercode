@@ -13,6 +13,7 @@ def fingerprint(port):
     ser.write(
                 bytes('?\r\n', "utf8")
             )
+    response = ser.readline().decode()
     print(response)
 
 
