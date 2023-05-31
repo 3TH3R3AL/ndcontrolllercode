@@ -38,6 +38,7 @@ def fingerprint(port):
         ret['type'] = "MHV-4"
         ser.close()
     else:
+        print(response)
         ret['type'] = "Unknown"
     return ret
 for i in range(0,5):
