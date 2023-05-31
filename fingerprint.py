@@ -31,10 +31,10 @@ def fingerprint(port):
         caen = Caen(9600,port=port)
         ret['serial_number'] = caen.get_serial_number()
         caen.close()
-    elif("MSCF-16" in response[1]):
+    elif("MSCF-16" in response[2]):
         ret['type'] = "MSCF-16"
         ser.close()
-    elif("MHV-4" in response[1]):
+    elif("MHV-4" in response[2]):
         ret['type'] = "MHV-4"
         ser.close()
     else:
