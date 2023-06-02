@@ -42,7 +42,7 @@ def fingerprint(port):
         ret['type'] = "MSCF-16"
         ser.close()
     elif("MHV-4" in response[2]):
-        ret['type'] = "MHV-4"
+        ret['type'] = "MHV4"
         ser.flushOutput()
         ser.close()
         mhv4 = MHV4(port,9600,[50,50,50,50],2.5)
