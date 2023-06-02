@@ -34,8 +34,8 @@ def fingerprint(port):
         caen = Caen(9600,port=port)
         ret['serial_number'] = caen.get_serial_number()
         for device in config['devices']:
-            if(device['controller'] == "Caen" and device['serial_number'] == ret['serial_number']):
-                device['port'] = port
+            if(config[device]['controller'] == "Caen" and config[device]['serial_number'] == ret['serial_number']):
+                config[device]['port'] = port
 
         caen.close()
     elif("MSCF-16" in response[2]):
@@ -47,9 +47,9 @@ def fingerprint(port):
         ser.close()
         mhv4 = MHV4(port,9600,[50,50,50,50],2.5)
         for device in config['devices']:
-            if(device['controller'] == "MHV4"):
-                device['port'] = port
-                device['voltages'] = [mhv4.get_set_voltage(i) for i in range(1,5)]
+            if(config[device]['controller'] == "MHV4"):
+                config[device]['port'] = port
+                config[device]['voltages'] = [mhv4.get_set_voltage(i) for i in range(1,5)]
     else:
         print(response)
         ret['type'] = "Unknown"
