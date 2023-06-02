@@ -206,7 +206,7 @@ class MHV4:
 
     def send_command(self, command=""):
         command += "\r"
-        print("sent command '", bytes(command, "utf8"), "'", sep="")
+        #print("sent command '", bytes(command, "utf8"), "'", sep="")
         if command == "":
             return ""
         self.ser.write(bytes(command, "utf8"))
