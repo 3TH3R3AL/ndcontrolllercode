@@ -356,4 +356,4 @@ class MHV4:
         return response
 
 mhv = MHV4("/dev/ttyUSB4",9600,[50,50,50,50],2.5)
-print(mhv.heartbeat())
+print("'",mhv.heartbeat(),"'",sep="")
