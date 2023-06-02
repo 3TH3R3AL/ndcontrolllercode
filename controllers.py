@@ -353,6 +353,7 @@ class MHV4:
     def heartbeat(self):
         response  = self.send_command("PR")
         self.flush_output_buffer()
+        return response
 
 mhv = MHV4("/dev/ttyUSB4",9600,[50,50,50,50],2.5)
 print(mhv.heartbeat())
