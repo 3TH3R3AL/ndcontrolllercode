@@ -359,5 +359,5 @@ class MHV4:
 
 mhv = MHV4("/dev/ttyUSB4",9600,[ 0.0, 6553.5, 50.0, 40.0],2.5)
 
-print(mhv.heartbeat())
+print(mhv.get_voltage_preset(2))
 mhv.close()
