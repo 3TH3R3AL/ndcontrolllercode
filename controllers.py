@@ -67,6 +67,8 @@ class Caen:
 
     def flush_input_buffer(self):
         self.ser.flushInput()
+    def flush_output_buffer(self):
+        self.ser.flushOutput()
 
     def set_on(self, channel):
         if channel not in [0, 1, 2, 3, 4]:
@@ -214,7 +216,8 @@ class MHV4:
 
     def flush_input_buffer(self):
         self.ser.flushInput()
-
+    def flush_output_buffer(self):
+        self.ser.flushOutput()
     def set_on(self, channel):
         if channel not in [0, 1, 2, 3, 4]:
             return
@@ -347,3 +350,9 @@ class MHV4:
                 break
 
             time.sleep(RAMP_INTERVAL)
+    def heartbeat(self):
+        response  = self.send_command("PR")
+        self.flush_output_buffer()
+
+mhv = MHV4("/dev/ttyUSB4",9600,[50,50,50,50],2.5)
+print(mhv.heartbeat())

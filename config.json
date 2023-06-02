@@ -39,7 +39,14 @@
     },
     "devices": {
         "MHV4": {
-            "controller": "MHV4"
+            "controller": "MHV4",
+            "port": "/dev/ttyUSB4",
+            "voltages": [
+                0.0,
+                6553.5,
+                50.0,
+                40.0
+            ]
         },
         "CAEN 1": {
             "controller": "Caen",
