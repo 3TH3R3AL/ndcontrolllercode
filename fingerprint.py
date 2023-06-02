@@ -1,7 +1,11 @@
-from controllers import Caen, MHV4
+from controllers import Caen
 import serial
 import json
 import time
+
+with open('config.json','r') as f:
+    config = json.loads(f.read())
+
 
 ports = {
 
@@ -44,7 +48,7 @@ def fingerprint(port):
 for i in range(0,5):
     port = '/dev/ttyUSB' + str(i)
     ports[port] = fingerprint(port)
-
+config['ports'] = ports
 with open('config.json','w') as f:
-    f.write(json.dumps(ports))
+    f.write(json.dumps(config))
 

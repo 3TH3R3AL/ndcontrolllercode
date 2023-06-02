@@ -1,5 +1,39 @@
 {
-    "ports" : {
+    "ports": {
+        "/dev/ttyUSB0": {
+            "type": "CAEN",
+            "serial_number": 1283
+        },
+        "/dev/ttyUSB1": {
+            "type": "MSCF-16"
+        },
+        "/dev/ttyUSB2": {
+            "type": "CAEN",
+            "serial_number": 719
+        },
+        "/dev/ttyUSB3": {
+            "type": "CAEN",
+            "serial_number": 89
+        },
+        "/dev/ttyUSB4": {
+            "type": "MHV-4"
+        }
+    },
+    "devices": {
+        "MHV-4": {
 
+        },
+        "CAEN 1": {
+            "serial_number": 1283
+        },
+        "CAEN 2": {
+            "serial_number": 719
+        },
+        "CAEN 3": {
+            "serial_number": 719
+        }
     }
+        
+
+    
 }

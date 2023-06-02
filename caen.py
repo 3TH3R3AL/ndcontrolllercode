@@ -279,7 +279,7 @@ Not Yet Implemented
 caen = Caen(1283,9600,[50,50,50,50],2.5)
 
 print(caen.get_serial_number())
-
+print(caen.get_voltage(1))
 #https://www.youtube.com/playlist?list=PLB968815D7BB78F9C
 #https://learn.ni.com/learn/article/labview-tutorial
 # first test program as whole  
