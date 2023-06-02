@@ -34,6 +34,7 @@ def fingerprint(port):
         ser.close()
         caen = Caen(9600,port=port)
         ret['serial_number'] = caen.get_serial_number()
+        ret['voltages'] = [caen.get_voltage(i) for i in range(0,4)]
         caen.close()
     elif("MSCF-16" in response[2]):
         ret['type'] = "MSCF-16"
@@ -47,8 +48,8 @@ def fingerprint(port):
     return ret
 for i in range(0,5):
     port = '/dev/ttyUSB' + str(i)
-    ports[port] = fingerprint(port)
-config['ports'] = ports
+    config.ports[port] = fingerprint(port)
+
 with open('config.json','w') as f:
     f.write(json.dumps(config))
 
