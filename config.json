@@ -34,12 +34,12 @@
             ]
         },
         "/dev/ttyUSB4": {
-            "type": "MHV-4"
+            "type": "MHV4"
         }
     },
     "devices": {
-        "MHV-4": {
-            "controller": "MHV-4"
+        "MHV4": {
+            "controller": "MHV4"
 
         },
         "CAEN 1": {
