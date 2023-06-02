@@ -47,10 +47,9 @@ def fingerprint(port):
         ser.close()
         mhv4 = MHV4(port,9600,[50,50,50,50],2.5)
         for device in config['devices']:
-            print(device)
-            if(config[device]['devices']['controller'] == "MHV4"):
-                config[device]['devices']['port'] = port
-                config[device]['devices']['voltages'] = [mhv4.get_set_voltage(i) for i in range(1,5)]
+            if(config['devices'][device]['controller'] == "MHV4"):
+                config['devices'][device]['port'] = port
+                config['devices'][device]['voltages'] = [mhv4.get_set_voltage(i) for i in range(1,5)]
     else:
         print(response)
         ret['type'] = "Unknown"

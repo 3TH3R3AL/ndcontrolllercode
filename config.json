@@ -40,7 +40,6 @@
     "devices": {
         "MHV4": {
             "controller": "MHV4"
-
         },
         "CAEN 1": {
             "controller": "Caen",
