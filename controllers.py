@@ -245,6 +245,7 @@ class MHV4:
     def get_voltage_preset(self, channel):
         response = self.send_command("R%d" % channel)
         linestr = response.decode("utf8")
+        print(linestr)
         pattern = re.match(r".*([\+\-\ ])(\d*.\d*)V", linestr, re.IGNORECASE)
 
         if pattern is not None:
