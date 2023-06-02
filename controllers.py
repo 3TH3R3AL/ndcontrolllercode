@@ -242,7 +242,7 @@ class MHV4:
             return voltage
         else:
             return 0.0
-    def get_set_voltage(self, channel):
+    def get_voltage_preset(self, channel):
         response = self.send_command("R%d" % channel)
         linestr = response.decode("utf8")
         pattern = re.match(r".*([+-])(\d*.\d*)", linestr, re.IGNORECASE)
@@ -357,3 +357,6 @@ class MHV4:
         self.flush_output_buffer()
         return response
 
+mhv = MHV4("/dev/ttyUSB4",9600,[ 0.0, 6553.5, 50.0, 40.0])
+
+print(mhv.get_voltage_preset())
