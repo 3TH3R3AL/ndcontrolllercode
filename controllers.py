@@ -248,7 +248,7 @@ class MHV4:
         pattern = re.match(r".*([\+\-\ ])(\d*.\d*)", linestr, re.IGNORECASE)
 
         if pattern is not None:
-            voltage = float(pattern.group(2))
+            voltage = float(pattern.group(1))
             if pattern.group(0) == "-":
                 voltage = -voltage
             return voltage
