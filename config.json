@@ -43,13 +43,14 @@
             "port": "/dev/ttyUSB4",
             "voltages": [
                 0.0,
-                0.0,
-                0.0,
-                0.0
+                6553.5,
+                50.0,
+                40.0
             ]
         },
         "CAEN 1": {
             "controller": "Caen",
+            "port": "/dev/ttyUSB0",
             "serial_number": 1283,
             "voltages": [
                 0.0,
@@ -60,6 +61,7 @@
         },
         "CAEN 2": {
             "controller": "Caen",
+            "port": "/dev/ttyUSB2",
             "serial_number": 719,
             "voltages": [
                 7200.0,
@@ -70,6 +72,7 @@
         },
         "CAEN 3": {
             "controller": "Caen",
+            "port": "/dev/ttyUSB3",
             "serial_number": 719,
             "voltages": [
                 6000.0,

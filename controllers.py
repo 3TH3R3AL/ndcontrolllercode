@@ -357,7 +357,7 @@ class MHV4:
         self.flush_output_buffer()
         return response
 
-mhv = MHV4("/dev/ttyUSB4",9600,[ 0.0, 6553.5, 50.0, 40.0],2.5)
+#mhv = MHV4("/dev/ttyUSB4",9600,[ 0.0, 6553.5, 50.0, 40.0],2.5)
 
-print(mhv.heartbeat())
-mhv.close()
+#print(mhv.heartbeat())
+#mhv.close()
