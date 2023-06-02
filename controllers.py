@@ -237,7 +237,18 @@ class MHV4:
             return voltage
         else:
             return 0.0
+    def get_set_voltage(self, channel):
+        response = self.send_command("R%d" % channel)
+        linestr = response.decode("utf8")
+        pattern = re.match(r".*([+-])(\d*.\d*)", linestr, re.IGNORECASE)
 
+        if pattern is not None:
+            voltage = float(pattern.group(2))
+            if pattern.group(1) == "-":
+                voltage = -voltage
+            return voltage
+        else:
+            return 0.0
     def get_voltage_limit(self, channel):
         return self.voltage_limit[channel]
 
