@@ -48,7 +48,7 @@ def fingerprint(port):
     return ret
 for i in range(0,5):
     port = '/dev/ttyUSB' + str(i)
-    config.ports[port] = fingerprint(port)
+    config['ports'][port] = fingerprint(port)
 
 with open('config.json','w') as f:
     f.write(json.dumps(config))
