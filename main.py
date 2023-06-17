@@ -31,6 +31,7 @@ param = []
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((TCP_IP,TCP_PORT))
 server.listen(1)
+
 rxset = [server]
 txset = []
 nbreak = 1
@@ -61,7 +62,8 @@ while nbreak:
                     elif(command["action"] == "set_off"):
                         device.set_on(command["channel"])
                     elif(command["action"] == "heartbeat"):
-                        print(device.heartbeat())
+                        
+                        sock.send(device.heartbeat())
                     elif(command["action"] == "close"):
                         nbreak = 0
                         sock.close()
