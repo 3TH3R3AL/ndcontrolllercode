@@ -33,8 +33,8 @@ server.bind((TCP_IP,TCP_PORT))
 server.listen(1)
 rxset = [server]
 txset = []
-
-while 1:
+nbreak = 1
+while nbreak:
     rxfds, txfds, exfds = select.select(rxset, txset, rxset)
 
     for sock in rxfds:
@@ -62,6 +62,10 @@ while 1:
                         device.set_on(command["channel"])
                     elif(command["action"] == "heartbeat"):
                         print(device.heartbeat())
+                    elif(command["action"] == "close"):
+                        nbreak = 0
+                        sock.close()
+                        break;
                     param.append(data)
             except:
                 print("Connection closed by remote end")
