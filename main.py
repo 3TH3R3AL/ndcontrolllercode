@@ -23,7 +23,7 @@ devices = {
 }
 
 
-TCP_IP = sys.argv[1]
+TCP_IP = 'localhost'
 TCP_PORT = 8888
 BUFFER_SIZE = 1024
 param = []
