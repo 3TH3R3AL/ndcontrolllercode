@@ -62,8 +62,7 @@ while nbreak:
                     elif(command["action"] == "set_off"):
                         device.set_on(command["channel"])
                     elif(command["action"] == "heartbeat"):
-                        
-                        sock.send(device.heartbeat())
+                        sock.send(device.heartbeat().encode())
                     elif(command["action"] == "close"):
                         nbreak = 0
                         sock.close()
