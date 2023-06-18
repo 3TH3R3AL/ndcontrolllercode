@@ -24,7 +24,7 @@ devices = {
 
 
 TCP_IP = 'localhost'
-TCP_PORT = 8888
+TCP_PORT = 8880
 BUFFER_SIZE = 1024
 param = []
 
