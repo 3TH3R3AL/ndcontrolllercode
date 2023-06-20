@@ -27,7 +27,7 @@ hostname = socket.gethostname()
 
 # Get the IP address associated with the hostname
 ip_address = socket.gethostbyname(hostname)
-
+print("receiving from",ip_address)
 TCP_PORT = 8880
 BUFFER_SIZE = 1024
 param = []
