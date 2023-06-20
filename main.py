@@ -23,13 +23,17 @@ devices = {
 }
 
 
-TCP_IP = 'localhost'
+hostname = socket.gethostname()
+
+# Get the IP address associated with the hostname
+ip_address = socket.gethostbyname(hostname)
+
 TCP_PORT = 8880
 BUFFER_SIZE = 1024
 param = []
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind((TCP_IP,TCP_PORT))
+server.bind((ip_address,TCP_PORT))
 server.listen(1)
 
 rxset = [server]
