@@ -60,8 +60,13 @@ while nbreak:
                 elif command["action"] == "close":
                     nbreak = 0
                     sock.close()
+                    mhv4.close()
+                    caen1.close()
+                    caen2.close()
+                    caen3.close()
                     break
             except:
                 print("Connection closed by remote end")
                 rxset.remove(sock)
                 sock.close()
+server.close()
