@@ -45,8 +45,9 @@ while nbreak:
             conn.setblocking(0)
             rxset.append(conn)
             print("Connection from address:", addr)
+            '''
             welcome_message = "Connected to stgcontrol server\r\n"
-            conn.sendall(welcome_message.encode())
+            conn.sendall(welcome_message.encode())'''
         else:
             try:
                 data = sock.recv(BUFFER_SIZE)
