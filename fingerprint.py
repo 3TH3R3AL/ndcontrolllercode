@@ -20,7 +20,7 @@ def fingerprint(port):
     ser.flushOutput()
     time.sleep(0.1)
     ser.write(
-                bytes('?\r\n', "utf8")
+                bytes('?\r', "utf8")
             )
     
     
