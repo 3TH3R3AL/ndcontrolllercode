@@ -51,7 +51,10 @@ while nbreak:
         else:
             try:
                 data = sock.recv(BUFFER_SIZE)
-                command = json.loads(data)
+                try: 
+                    command = json.loads(data)
+                except:
+                    print("Bad command: \"",data,"\"")
                 device = devices[command["device"]]
                 if command["action"] == "set_on":
                     device.set_on(command["channel"])
