@@ -47,7 +47,7 @@ def fingerprint(port):
         ser.flushOutput()
         ser.flushInput()
         ser.close()
-        time.sleep(2)
+        time.sleep(1)
         mhv4 = MHV4(port,9600,[ 0.0, 0, 0.0, 0.0],2.5)
         for device in config['devices']:
             if(config['devices'][device]['controller'] == "MHV4"):
