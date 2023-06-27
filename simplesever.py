@@ -1,17 +1,17 @@
 import socket
-
+import urllib.parse
 def handle_client(client_socket):
     while True:
-        data = client_socket.recv(1024)
+        data = client_socket.recv(1024).decode('utf-8')
         if not data:
             break
-        print(data, end='')
+        print(urllib.parse.quote(data), end='')
 
     client_socket.close()
 
 def run_server():
     host = '127.0.0.1'  # localhost
-    port = 8001
+    port = 8000
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((host, port))
