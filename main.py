@@ -53,7 +53,7 @@ while nbreak:
                 rec = sock.recv(BUFFER_SIZE).decode('utf-8')
                 split = rec.split("\n")
                 print(split)
-                if(split == ['split']):
+                if(split == ['']):
                     raise RuntimeError("Connection Closed")
                 for data in split:
                     if(data == ""):
