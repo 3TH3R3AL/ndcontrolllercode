@@ -33,7 +33,7 @@ txset = []
 nbreak = 1
 
 def formatResponse(action,device,channel,data):
-    return "|{action},{device},{channel},{data}|".format(channel=int(channel),price=str(action),device=str(device),data=int(data)).encode()
+    return "|{action},{device},{channel},{data}|".format(action=str(action),price=str(action),device=str(device),channel=int(channel),data=int(data)).encode()
 
 
 while nbreak:
