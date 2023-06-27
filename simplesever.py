@@ -11,7 +11,7 @@ def handle_client(client_socket):
 
 def run_server():
     host = '127.0.0.1'  # localhost
-    port = 8000
+    port = 8001
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((host, port))
