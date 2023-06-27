@@ -73,7 +73,7 @@
         "CAEN 3": {
             "controller": "Caen",
             "port": "/dev/ttyUSB3",
-            "serial_number": 719,
+            "serial_number": 89,
             "voltages": [
                 6000.0,
                 2737.0,

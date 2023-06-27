@@ -32,6 +32,10 @@ rxset = [server]
 txset = []
 nbreak = 1
 
+def formatResponse(action,device,data):
+    return "|{action},{device},{data}".format(price=str(action),device=str(device),data=int(data)).encode()
+
+
 while nbreak:
     rxfds, txfds, exfds = select.select(rxset, txset, rxset)
 
@@ -53,10 +57,7 @@ while nbreak:
                 elif command["action"] == "set_off":
                     device.set_on(command["channel"])
                 elif command["action"] == "heartbeat":
-                    sock.send(json.dumps({
-                        "device"  : command["device"],
-                        "response": device.heartbeat()
-                        }).encode())
+                    sock.send(formatResponse("heartbeat",command["device"],device.heartbeat()))
                 elif command["action"] == "close":
                     nbreak = 0
                     sock.close()
