@@ -13,7 +13,8 @@
 - Get preset values save them and don't change them (except for channel 1 and 2 of serial 1283, but don't go higher than 100v on those)
 - Turn channel on and off
 - Interface with labview (with heartbeat)
-
+- All but 4th on MHV4
+- Use Caen with 0V presets
 
 0. Caen 1283
 1. MSCF-16 Amplifier thing
