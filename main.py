@@ -54,6 +54,8 @@ while nbreak:
                 split = rec.split("\n")
                 print(split)
                 for data in split:
+                    if(data == ""):
+                        continue
                     try: 
                         command = json.loads(data)
                     except:
