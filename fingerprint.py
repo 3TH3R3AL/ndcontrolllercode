@@ -44,6 +44,7 @@ def fingerprint(port):
     elif("MHV-4" in response[1]):
         ret['type'] = "MHV4"
         ser.flushOutput()
+        ser.flushInput()
         ser.close()
         mhv4 = MHV4(port,9600,[ 0.0, 6553.5, 50.0, 40.0],2.5)
         for device in config['devices']:
@@ -54,6 +55,7 @@ def fingerprint(port):
     else:
         print(response)
         ret['type'] = "Unknown"
+        ser.close()
     return ret
 for i in range(4,5):
     port = '/dev/ttyUSB' + str(i)

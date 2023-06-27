@@ -34,7 +34,7 @@
             ]
         },
         "/dev/ttyUSB4": {
-            "type": "Unknown"
+            "type": "MHV4"
         }
     },
     "devices": {
