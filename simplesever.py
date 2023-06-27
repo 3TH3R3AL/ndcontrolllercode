@@ -2,10 +2,10 @@ import socket
 import urllib.parse
 def handle_client(client_socket):
     while True:
-        data = client_socket.recv(1024).decode('utf-8')
+        data = client_socket.recv(1024)
         if not data:
             break
-        print(urllib.parse.quote(data), end='')
+        print(data, end='')
 
     client_socket.close()
 
