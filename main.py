@@ -55,7 +55,7 @@ while nbreak:
                 print(split)
                 if(split == ['']):
                     raise RuntimeError("Connection Closed")
-                    break;
+                    break
                 for data in split:
                     if(data == ""):
                         continue
