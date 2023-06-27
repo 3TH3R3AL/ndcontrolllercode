@@ -13,6 +13,7 @@ ports = {
 
 
 def fingerprint(port):
+    print(port)
     ret = {}
     ser = serial.Serial(port=port, baudrate=9600, timeout=1)
     time.sleep(0.1)
@@ -61,7 +62,7 @@ def fingerprint(port):
         print(test)
         mhv.close()        
     else:
-        print(response)
+        print("Unknown, response:" ,response)
         ret['type'] = "Unknown"
         ser.close()
     return ret
