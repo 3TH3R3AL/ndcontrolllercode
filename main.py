@@ -67,8 +67,8 @@ while nbreak:
                     caen2.close()
                     caen3.close()
                     break
-            except:
-                print("Connection closed by remote end")
+            except Exception as e:
+                print("Connection closed by remote end: ",e)
                 rxset.remove(sock)
                 sock.close()
 server.close()
