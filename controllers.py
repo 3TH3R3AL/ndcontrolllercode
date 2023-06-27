@@ -35,6 +35,7 @@ class Caen:
         self.ser.close()
 
     def send_command(self, command="", channel="", parameter="", format="", value=0):
+        time.sleep(0.1)
         if command == "" or channel == "":
             return ""
         COMMAND_STRING = "$BD:0,CMD:{CMD},CH:{CH},PAR:{PAR}{VAL}\r\n"
@@ -357,3 +358,10 @@ class MHV4:
         self.flush_output_buffer()
         return response
     
+mhv = MHV4("/dev/ttyUSB4",9600,[ 0.0, 0, 0.0, 0.0],2.5)
+
+test = [mhv.get_voltage_preset(i) for i in range(1,4)]
+mhv.flush_input_buffer()
+mhv.flush_output_buffer()
+print(test)
+mhv.close()

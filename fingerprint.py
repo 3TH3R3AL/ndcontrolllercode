@@ -47,7 +47,7 @@ def fingerprint(port):
         ser.flushOutput()
         ser.flushInput()
         ser.close()
-        '''
+        time.sleep(2)
         mhv4 = MHV4(port,9600,[ 0.0, 0, 0.0, 0.0],2.5)
         for device in config['devices']:
             if(config['devices'][device]['controller'] == "MHV4"):
@@ -55,12 +55,8 @@ def fingerprint(port):
                 config['devices'][device]['voltages'] = [mhv4.get_voltage_preset(i) for i in range(1,4)]
         
         mhv4.close()
-        '''
-        mhv = MHV4("/dev/ttyUSB4",9600,[ 0.0, 0, 0.0, 0.0],2.5)
-        test = [mhv.get_voltage_preset(i) for i in range(1,4)]
 
-        print(test)
-        mhv.close()        
+    
     else:
         print("Unknown, response:" ,response)
         ret['type'] = "Unknown"
