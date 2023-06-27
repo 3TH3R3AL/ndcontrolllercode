@@ -361,3 +361,4 @@ mhv = MHV4("/dev/ttyUSB4",9600,[ 0.0, 0, 0.0, 0.0],0)
 test = [mhv.get_voltage_preset(i) for i in range(1,4)]
 
 print(test)
+mhv.close()
