@@ -50,26 +50,29 @@ while nbreak:
             conn.sendall(welcome_message.encode())'''
         else:
             try:
-                data = sock.recv(BUFFER_SIZE)
-                try: 
-                    command = json.loads(data)
-                except:
-                    print("Bad command: \"",data,"\"")
-                device = devices[command["device"]]
-                if command["action"] == "set_on":
-                    device.set_on(command["channel"])
-                elif command["action"] == "set_off":
-                    device.set_on(command["channel"])
-                elif command["action"] == "heartbeat":
-                    sock.send(formatResponse("heartbeat",command["device"],0,device.heartbeat()))
-                elif command["action"] == "close":
-                    nbreak = 0
-                    sock.close()
-                    mhv4.close()
-                    caen1.close()
-                    caen2.close()
-                    caen3.close()
-                    break
+                rec = sock.recv(BUFFER_SIZE).decode('utf-8')
+                split = rec.split("\n")
+                print(split)
+                for data in split:
+                    try: 
+                        command = json.loads(data)
+                    except:
+                        print("Bad command: \"",data,"\"")
+                    device = devices[command["device"]]
+                    if command["action"] == "set_on":
+                        device.set_on(command["channel"])
+                    elif command["action"] == "set_off":
+                        device.set_on(command["channel"])
+                    elif command["action"] == "heartbeat":
+                        sock.send(formatResponse("heartbeat",command["device"],0,device.heartbeat()))
+                    elif command["action"] == "close":
+                        nbreak = 0
+                        sock.close()
+                        mhv4.close()
+                        caen1.close()
+                        caen2.close()
+                        caen3.close()
+                        break
             except Exception() as e:
                 print("Connection closed by remote end: ",e)
                 rxset.remove(sock)
