@@ -356,7 +356,8 @@ class MHV4:
         response  = self.send_command("PR") == b'\rMHV-4 preset summary:\n'
         self.flush_output_buffer()
         return response
-mhv = MHV4("/dev/ttyUSB4",9600,[ 0.0, 0, 0.0, 0.0],0)
+    
+mhv = MHV4("/dev/ttyUSB4",9600,[ 0.0, 0, 0.0, 0.0],2.5)
 
 test = [mhv.get_voltage_preset(i) for i in range(1,4)]
 
