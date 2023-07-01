@@ -7,12 +7,13 @@ import select
 
 with open("config.json", "r") as f:
     config = json.loads(f.read())
+enabled = [True,True,True,False]
 
-
-caen1 = Caen(9600, port=config["devices"]["CAEN 1"]["port"])
-caen2 = Caen(9600, port=config["devices"]["CAEN 2"]["port"])
-caen3 = Caen(9600, port=config["devices"]["CAEN 3"]["port"])
-mhv4 = MHV4(
+mhv4, caen1, caen2, caen3 = {}
+if(enabled[0]): caen1 = Caen(9600, port=config["devices"]["CAEN 1"]["port"])
+if(enabled[1]): caen2 = Caen(9600, port=config["devices"]["CAEN 2"]["port"])
+if(enabled[2]): caen3 = Caen(9600, port=config["devices"]["CAEN 3"]["port"])
+if(enabled[3]): mhv4 = MHV4(
     config["devices"]["MHV4"]["port"], 9600, config["devices"]["MHV4"]["voltages"], 2.5
 )
 
@@ -52,7 +53,6 @@ while nbreak:
             try:
                 rec = sock.recv(BUFFER_SIZE).decode('utf-8')
                 split = rec.split("\n")
-                print(split)
                 if(split == ['']):
                     raise RuntimeError("Connection Closed")
                     break
@@ -64,7 +64,9 @@ while nbreak:
                     except:
                         print("Bad command: \"",data,"\"")
                     device = devices[command["device"]]
-                    if command["action"] == "set_on":
+                    if(device == {}):
+                        sock.send(formatResponse("disabled",command["device"],0,0))
+                    elif command["action"] == "set_on":
                         device.set_on(command["channel"])
                     elif command["action"] == "set_off":
                         device.set_on(command["channel"])
@@ -73,10 +75,8 @@ while nbreak:
                     elif command["action"] == "close":
                         nbreak = 0
                         sock.close()
-                        mhv4.close()
-                        caen1.close()
-                        caen2.close()
-                        caen3.close()
+                        for _, device in devices.items():
+                            if(device != {}): device.close()
                         break
             except Exception() as e:
                 print("Connection closed by remote end: ",e)
