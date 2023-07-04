@@ -19,7 +19,7 @@ if(enabled[3]): mhv4 = MHV4(
 
 devices = {"CAEN 1": caen1, "CAEN 2": caen2, "CAEN 3": caen3, "MHV4": mhv4}
 
-
+caen1.set_voltage(1,100)
 TCP_IP = "0.0.0.0"
 TCP_PORT = 8880
 BUFFER_SIZE = 1024
@@ -55,7 +55,7 @@ while nbreak:
                 split = rec.split("\n")
                 if(split == ['']):
                     raise RuntimeError("Connection Closed")
-                
+                print(split)
                 for data in split:
                     if(data == ""):
                         continue
