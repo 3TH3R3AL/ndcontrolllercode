@@ -22,7 +22,7 @@ devices = {"CAEN 1": caen1, "CAEN 2": caen2, "CAEN 3": caen3, "MHV4": mhv4}
 caen1.set_voltage(1,100)
 TCP_IP = "0.0.0.0"
 TCP_PORT = 8880
-BUFFER_SIZE = 2048
+BUFFER_SIZE = pow(2,15)
 param = []
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
