@@ -9,7 +9,7 @@ with open("config.json", "r") as f:
     config = json.loads(f.read())
 enabled = [True,True,True,False]
 
-mhv4, caen1, caen2, caen3 = {}
+mhv4, caen1, caen2, caen3 = {},{},{},{}
 if(enabled[0]): caen1 = Caen(9600, port=config["devices"]["CAEN 1"]["port"])
 if(enabled[1]): caen2 = Caen(9600, port=config["devices"]["CAEN 2"]["port"])
 if(enabled[2]): caen3 = Caen(9600, port=config["devices"]["CAEN 3"]["port"])
