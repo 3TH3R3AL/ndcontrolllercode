@@ -82,7 +82,7 @@ class Caen:
         response = self.send_command(channel=channel, command="SET", parameter="OFF")
 
     def get_voltage(self, channel):
-        response = self.send_command(channel=channel, command="MON", parameter="VSET")
+        response = self.send_command(channel=channel, command="MON", parameter="VMON")
         linestr = response
         pattern = re.match(r".*VAL:(\d*.\d*)", linestr, re.IGNORECASE)
 

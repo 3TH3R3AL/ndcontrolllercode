@@ -34,7 +34,7 @@ txset = []
 nbreak = 1
 
 def formatResponse(action,device,channel,data):
-    return "|{action},{device},{channel},{data}|\r\n".format(action=str(action),price=str(action),device=str(device),channel=int(channel),data=int(data)).encode()
+    return "|{action},{device},{channel},{data}|\r\n".format(action=str(action),price=str(action),device=str(device),channel=int(channel),data=float(data)).encode()
 
 
 while nbreak:
@@ -55,7 +55,7 @@ while nbreak:
                 split = rec.split("\n")
                 if(split == ['']):
                     raise RuntimeError("Connection Closed")
-                    break
+                
                 for data in split:
                     if(data == ""):
                         continue
@@ -63,15 +63,26 @@ while nbreak:
                         command = json.loads(data)
                     except:
                         print("Bad command: \"",data,"\"")
+
                     device = devices[command["device"]]
                     if(device == {}):
                         sock.send(formatResponse("disabled",command["device"],0,0))
+
                     elif command["action"] == "set_on":
                         device.set_on(command["channel"])
+
                     elif command["action"] == "set_off":
                         device.set_on(command["channel"])
+
                     elif command["action"] == "heartbeat":
                         sock.send(formatResponse("heartbeat",command["device"],0,device.heartbeat()))
+
+                    elif command["action"] == "get_voltage":
+                        sock.send(formatResponse("get_voltage",command["device"],command["channel"],device.get_voltage(command["channel"])))
+
+                    elif command["action"] == "get_current":
+                        sock.send(formatResponse("get_current",command["device"],command["channel"],device.get_current(command["channel"])))
+
                     elif command["action"] == "close":
                         nbreak = 0
                         sock.close()
