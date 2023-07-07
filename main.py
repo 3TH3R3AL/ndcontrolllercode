@@ -47,7 +47,8 @@ while nbreak:
             conn.setblocking(0)
             rxset.append(conn)
             for device in devices:
-                device.thread = threading.Thread(target=device.start_queue_processing(sock))
+                if(device != {}):
+                    device.thread = threading.Thread(target=device.start_queue_processing(sock))
 
             print("Connection from address:", addr)
             '''
