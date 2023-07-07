@@ -24,7 +24,9 @@ def processCommand(command,device):
         sock.send(formatResponse("heartbeat",command["device"],0,device.heartbeat()))
 
     elif command["action"] == "get_voltage":
-        sock.send(formatResponse("get_voltage",command["device"],command["channel"],device.get_voltage(command["channel"])))
+        voltage = device.get_voltage(command["channel"])
+        print(command["device"],command["channel"],voltage)
+        sock.send(formatResponse("get_voltage",command["device"],command["channel"],voltage))
 
     elif command["action"] == "get_current":
         sock.send(formatResponse("get_current",command["device"],command["channel"],device.get_current(command["channel"])))

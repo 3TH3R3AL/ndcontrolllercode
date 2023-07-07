@@ -82,7 +82,9 @@ while nbreak:
                             if(device != {}): device.close()
                         break
                     device.queue.append(command)
-                print([(len(device.queue) if device != {} else 0) for _,device in devices.items()])
+                    if(len(device.queue > 10)):
+                        print(command["device"],"is over queued")
+                #print([(len(device.queue) if device != {} else 0) for _,device in devices.items()])
             except Exception() as e:
                 print("Connection closed by remote end: ",e)
                 rxset.remove(sock)
