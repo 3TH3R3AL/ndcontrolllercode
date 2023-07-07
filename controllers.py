@@ -11,7 +11,11 @@ LOCK_PATH = "/tmp/"
 def formatResponse(action,device,channel,data):
     return "|{action},{device},{channel},{data}|\r\n".format(action=str(action),price=str(action),device=str(device),channel=int(channel),data=float(data)).encode()
 
-def processCommand(command,device,sock):
+def processCommand(command,device):
+    sock = device.sock
+    if sock.fileno() == -1:
+        print("Socket is closed or disconnected.")
+        return
     if command["action"] == "set_on":
         device.set_on(command["channel"])
     elif command["action"] == "set_off":
@@ -36,7 +40,7 @@ class Caen:
         time.sleep(0.1)
         self.queue = deque()
         self.thread = {}
-
+        self.sock = {}
         self.processing = True
         self.serial_number = self.get_serial_number()
         i = 1
@@ -88,9 +92,10 @@ class Caen:
         return returnVal  # return response from the unit
 
     def start_queue_processing(self,sock):
+        self.sock = sock
         while self.processing:
             if self.queue:
-                processCommand(self.queue.popleft(),self,sock)
+                processCommand(self.queue.popleft(),self)
             else:
                 time.sleep(0.1)
 
@@ -230,6 +235,7 @@ class MHV4:
         self.queue = deque()
         self.processing = True
         self.thread = {}
+        self.sock = {}
         self.ser = serial.Serial(port=self.port, baudrate=baud, timeout=1)
         time.sleep(0.1)  # Wait 100 ms after opening the port before sending commands
         self.ser.flushInput()  # Flush the input buffer of the serial port before sending any new commands
@@ -249,9 +255,10 @@ class MHV4:
         self.ser.readline()
         return self.ser.readline()
     def start_queue_processing(self,sock):
+        self.sock = sock
         while self.processing:
             if self.queue:
-                processCommand(self.queue.popleft(),self,sock)
+                processCommand(self.queue.popleft(),self)
             else:
                 time.sleep(0.1)
     def flush_input_buffer(self):
