@@ -18,8 +18,11 @@ def processCommand(command,device):
         return
     if command["action"] == "set_on":
         device.set_on(command["channel"])
+        print("set on",command["device"],command["channel"])
     elif command["action"] == "set_off":
-        device.set_on(command["channel"])
+        device.set_off(command["channel"])
+        print("set off",command["device"],command["channel"])
+
     elif command["action"] == "heartbeat":
         sock.send(formatResponse("heartbeat",command["device"],0,device.heartbeat()))
 
