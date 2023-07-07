@@ -10,6 +10,7 @@ def thread_function():
 # Create a thread object
 thread = threading.Thread(target=thread_function)
 # Start the thread
+print('test')
 thread.start()
 time.sleep(0.5)
 
