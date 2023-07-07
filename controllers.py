@@ -1,13 +1,29 @@
 #! /bin/python
 import re
 import time
-
+from collections import deque
 import serial
 
 VOLTAGE_LIMIT = 100
 LOCK_TIMEOUT = 5
 RAMP_INTERVAL = 1
 LOCK_PATH = "/tmp/"
+def formatResponse(action,device,channel,data):
+    return "|{action},{device},{channel},{data}|\r\n".format(action=str(action),price=str(action),device=str(device),channel=int(channel),data=float(data)).encode()
+
+def processCommand(command,device,sock):
+    if command["action"] == "set_on":
+        device.set_on(command["channel"])
+    elif command["action"] == "set_off":
+        device.set_on(command["channel"])
+    elif command["action"] == "heartbeat":
+        sock.send(formatResponse("heartbeat",command["device"],0,device.heartbeat()))
+
+    elif command["action"] == "get_voltage":
+        sock.send(formatResponse("get_voltage",command["device"],command["channel"],device.get_voltage(command["channel"])))
+
+    elif command["action"] == "get_current":
+        sock.send(formatResponse("get_current",command["device"],command["channel"],device.get_current(command["channel"])))
 
 
 class Caen:
@@ -18,6 +34,8 @@ class Caen:
         time.sleep(0.1)  # Wait 100 ms after opening the port before sending commands
         self.ser.flushInput()  # Flush the input buffer of the serial port before sending any new commands
         time.sleep(0.1)
+        self.queue = deque()
+        self.processing = True
         self.serial_number = self.get_serial_number()
         i = 1
         if('serial_number' in kwargs):
@@ -32,6 +50,7 @@ class Caen:
                 i += 1
 
     def close(self):
+        self.processing = False
         self.ser.close()
 
     def send_command(self, command="", channel="", parameter="", format="", value=0):
@@ -65,6 +84,13 @@ class Caen:
             print("Error: ", returnVal)
             raise Exception(returnVal)
         return returnVal  # return response from the unit
+
+    def start_queue_processing(self,sock):
+        while self.processing:
+            if self.queue:
+                processCommand(self.queue.popleft(),self,sock)
+            else:
+                time.sleep(0.1)
 
     def flush_input_buffer(self):
         self.ser.flushInput()
@@ -199,12 +225,16 @@ class MHV4:
         self.port = port
         self.voltage_limits = voltage_limits
         self.ramp_rate = ramp_rate
+        self.queue = deque()
+        self.processing = True
+        self.thread = {}
         self.ser = serial.Serial(port=self.port, baudrate=baud, timeout=1)
         time.sleep(0.1)  # Wait 100 ms after opening the port before sending commands
         self.ser.flushInput()  # Flush the input buffer of the serial port before sending any new commands
         time.sleep(0.1)
 
     def close(self):
+        self.processing = False
         self.ser.close()
 
     def send_command(self, command=""):
@@ -216,7 +246,12 @@ class MHV4:
         time.sleep(0.1)
         self.ser.readline()
         return self.ser.readline()
-
+    def start_queue_processing(self,sock):
+        while self.processing:
+            if self.queue:
+                processCommand(self.queue.popleft(),self,sock)
+            else:
+                time.sleep(0.1)
     def flush_input_buffer(self):
         self.ser.flushInput()
     def flush_output_buffer(self):

@@ -15,7 +15,7 @@
 - Interface with labview (with heartbeat)
 - All but 4th on MHV4
 - Use Caen with 0V presets
-
+- Parallel, clean stop, initialization
 0. Caen 1283
 1. MSCF-16 Amplifier thing
 2. Caen 2

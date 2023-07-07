@@ -4,6 +4,7 @@ import time
 import sys
 import socket
 import select
+import threading
 
 with open("config.json", "r") as f:
     config = json.loads(f.read())
@@ -45,6 +46,9 @@ while nbreak:
             conn, addr = server.accept()
             conn.setblocking(0)
             rxset.append(conn)
+            for device in devices:
+                device.thread = threading.Thread(target=device.start_queue_processing(sock))
+
             print("Connection from address:", addr)
             '''
             welcome_message = "Connected to stgcontrol server\r\n"
@@ -67,28 +71,14 @@ while nbreak:
                     device = devices[command["device"]]
                     if(device == {}):
                         sock.send(formatResponse("disabled",command["device"],0,0))
-
-                    elif command["action"] == "set_on":
-                        device.set_on(command["channel"])
-
-                    elif command["action"] == "set_off":
-                        device.set_on(command["channel"])
-
-                    elif command["action"] == "heartbeat":
-                        sock.send(formatResponse("heartbeat",command["device"],0,device.heartbeat()))
-
-                    elif command["action"] == "get_voltage":
-                        sock.send(formatResponse("get_voltage",command["device"],command["channel"],device.get_voltage(command["channel"])))
-
-                    elif command["action"] == "get_current":
-                        sock.send(formatResponse("get_current",command["device"],command["channel"],device.get_current(command["channel"])))
-
-                    elif command["action"] == "close":
+                    
+                    if command["action"] == "close":
                         nbreak = 0
                         sock.close()
                         for _, device in devices.items():
                             if(device != {}): device.close()
                         break
+                    device.queue.append(command)
             except Exception() as e:
                 print("Connection closed by remote end: ",e)
                 rxset.remove(sock)
