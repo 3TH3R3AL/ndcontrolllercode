@@ -50,6 +50,7 @@ while nbreak:
                 
                 if(device != {}):
                     device.thread = threading.Thread(target=device.start_queue_processing(sock))
+                    device.thread.start()
 
             print("Connection from address:", addr)
             '''
