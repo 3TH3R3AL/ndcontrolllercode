@@ -62,7 +62,7 @@ while nbreak:
                 split = rec.split("\n")
                 if(split == ['']):
                     raise RuntimeError("Connection Closed")
-                print(split)
+                #print(split)
                 for data in split:
                     if(data == ""):
                         continue
@@ -82,7 +82,7 @@ while nbreak:
                             if(device != {}): device.close()
                         break
                     elif(command["action"] == "set_on" or command["action"] == "set_off"):
-                        print(command["action"],"added to queue")
+                        #print(command["action"],"added to queue")
                         device.queue.appendleft(command)
                     else:
                         device.queue.append(command)
