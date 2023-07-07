@@ -49,7 +49,7 @@ while nbreak:
             for name, device in devices.items():
                 if(device != {}):
                     print("attempting to start",name)
-                    device.thread = threading.Thread(target=device.start_queue_processing(sock))
+                    threading.Thread(target=device.start_queue_processing(sock))
                     print(name,"started")
                     device.thread.start()
 
