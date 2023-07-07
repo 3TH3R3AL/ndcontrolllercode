@@ -28,7 +28,7 @@ def processCommand(command,device):
 
     elif command["action"] == "get_voltage":
         voltage = device.get_voltage(command["channel"])
-        print(command["device"],command["channel"],voltage)
+        #print(command["device"],command["channel"],voltage)
         sock.send(formatResponse("get_voltage",command["device"],command["channel"],voltage))
 
     elif command["action"] == "get_current":
