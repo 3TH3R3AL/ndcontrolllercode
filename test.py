@@ -4,7 +4,9 @@ test = ['test',"test2"]
 # Define a function that will be executed in a separate thread
 def thread_function():
     # Code to be executed in the thread
+    time.sleep(2)
     print("This is running in a separate thread",test)
+    
     test.pop()
 
 # Create a thread object
@@ -12,7 +14,6 @@ thread = threading.Thread(target=thread_function)
 # Start the thread
 print('test')
 thread.start()
-time.sleep(0.5)
 
 # Code to be executed in the main thread
 print("This is running in the main thread",test)

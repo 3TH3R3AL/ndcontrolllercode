@@ -46,10 +46,11 @@ while nbreak:
             conn, addr = server.accept()
             conn.setblocking(0)
             rxset.append(conn)
-            print("starting threads")
+            print("starting threads",devices.items())
             for name, device in devices.items():
-                
+                print("attemptint to start",name)
                 if(device != {}):
+                    time.sleep(0.1)
                     device.thread = threading.Thread(target=device.start_queue_processing(sock))
                     print(name,"started")
                     device.thread.start()
@@ -76,7 +77,7 @@ while nbreak:
                     device = devices[command["device"]]
                     if(device == {}):
                         sock.send(formatResponse("disabled",command["device"],0,0))
-                    
+                        continue
                     if command["action"] == "close":
                         nbreak = 0
                         sock.close()
