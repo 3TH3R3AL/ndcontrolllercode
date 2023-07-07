@@ -62,7 +62,7 @@ while nbreak:
                 split = rec.split("\n")
                 if(split == ['']):
                     raise RuntimeError("Connection Closed")
-                #print(split)
+                print(split)
                 for data in split:
                     if(data == ""):
                         continue
