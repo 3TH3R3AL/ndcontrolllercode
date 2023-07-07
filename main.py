@@ -37,7 +37,7 @@ nbreak = 1
 def formatResponse(action,device,channel,data):
     return "|{action},{device},{channel},{data}|\r\n".format(action=str(action),price=str(action),device=str(device),channel=int(channel),data=float(data)).encode()
 
-
+print("server started")
 while nbreak:
     rxfds, txfds, exfds = select.select(rxset, txset, rxset)
 
