@@ -46,7 +46,8 @@ while nbreak:
             conn, addr = server.accept()
             conn.setblocking(0)
             rxset.append(conn)
-            for device in devices:
+            for _, device in devices.items():
+                
                 if(device != {}):
                     device.thread = threading.Thread(target=device.start_queue_processing(sock))
 
