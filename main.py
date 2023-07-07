@@ -82,6 +82,7 @@ while nbreak:
                             if(device != {}): device.close()
                         break
                     elif(command["action"] == "set_on" or command["action"] == "set_off"):
+                        print(command["action"],"added to queue")
                         device.queue.appendleft(command)
                     else:
                         device.queue.append(command)
