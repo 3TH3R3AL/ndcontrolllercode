@@ -62,7 +62,7 @@ while nbreak:
                 split = rec.split("\n")
                 if(split == ['']):
                     raise RuntimeError("Connection Closed")
-                print(split)
+                #print(split)
                 for data in split:
                     if(data == ""):
                         continue
@@ -82,6 +82,7 @@ while nbreak:
                             if(device != {}): device.close()
                         break
                     device.queue.append(command)
+                print([len(device.queue) for _,device in devices.items()])
             except Exception() as e:
                 print("Connection closed by remote end: ",e)
                 rxset.remove(sock)
