@@ -46,11 +46,9 @@ while nbreak:
             conn, addr = server.accept()
             conn.setblocking(0)
             rxset.append(conn)
-            print("starting threads",devices.items())
             for name, device in devices.items():
-                print("attemptint to start",name)
                 if(device != {}):
-                    time.sleep(0.1)
+                    print("attempting to start",name)
                     device.thread = threading.Thread(target=device.start_queue_processing(sock))
                     print(name,"started")
                     device.thread.start()
