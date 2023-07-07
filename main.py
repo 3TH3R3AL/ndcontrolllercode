@@ -48,7 +48,7 @@ while nbreak:
             rxset.append(conn)
             for name, device in devices.items():
                 if(device != {}):
-                    device.thread = threading.Thread(target=device.start_queue_processing,args=(sock,))
+                    device.thread = threading.Thread(target=device.start_queue_processing,args=(conn,))
                     device.thread.start()
 
             print("Connection from address:", addr)
@@ -57,6 +57,7 @@ while nbreak:
             conn.sendall(welcome_message.encode())'''
         else:
             try:
+                #for _,device in devices.
                 rec = sock.recv(BUFFER_SIZE).decode('utf-8')
                 split = rec.split("\n")
                 if(split == ['']):
