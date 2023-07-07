@@ -1,23 +1,21 @@
-import threading
-import time
-# Define a function that will be executed in a separate thread
-def thread_function(test):
-    # Code to be executed in the thread
-    print("This is running in a separate thread",test)
-    
-    test.pop()
+from collections import deque
 
-# Create a thread object
-thread = threading.Thread(target=thread_function(1))
-# Start the thread
-print('test')
-thread.start()
+# Create an empty queue
+queue = deque()
 
-# Code to be executed in the main thread
-print("This is running in the main thread",1)
+# Enqueue elements
+queue.append(1)
+queue.append(2)
+queue.append(3)
+print(len(queue))
+# Dequeue elements
+item = queue.popleft()
+print(item)  # Output: 1
+print(len(queue))
 
-# Wait for the thread to finish
-thread.join()
+item = queue.popleft()
+print(item)  # Output: 2
 
-# Code after the thread has finished
-print("Thread has finished",2)
+# Check if the queue is empty
+if not queue:
+    print("Queue is empty")

@@ -81,7 +81,11 @@ while nbreak:
                         for _, device in devices.items():
                             if(device != {}): device.close()
                         break
-                    device.queue.append(command)
+                    elif(command["action"] == "set_on" or command["action"] == "set_off"):
+                        device.queue.appendleft(command)
+                    else:
+                        device.queue.append(command)
+
                     if(len(device.queue) > 10):
                         print(command["device"],"is over queued")
                 #print([(len(device.queue) if device != {} else 0) for _,device in devices.items()])
