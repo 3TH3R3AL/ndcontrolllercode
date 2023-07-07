@@ -35,6 +35,8 @@ class Caen:
         self.ser.flushInput()  # Flush the input buffer of the serial port before sending any new commands
         time.sleep(0.1)
         self.queue = deque()
+        self.thread = {}
+
         self.processing = True
         self.serial_number = self.get_serial_number()
         i = 1
