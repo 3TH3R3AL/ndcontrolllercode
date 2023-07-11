@@ -415,7 +415,7 @@ class MHV4:
         return response
     
 mhv4 = MHV4("/dev/ttyUSB4",9600,[0,0,0,0],3)
-print(type(mhv4.heartbeat()))
+print(mhv4.heartbeat())
 print(mhv4.heartbeat())
 print(mhv4.heartbeat())
 print(mhv4.heartbeat())
