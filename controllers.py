@@ -410,11 +410,11 @@ class MHV4:
 
             time.sleep(RAMP_INTERVAL)
     def heartbeat(self):
-        response  = self.send_command("PR") == b'\rMHV-4 preset summary:\n'
+        response  = self.send_command("PR")
         print(response)
         time.sleep(0.5)
         self.flush_output_buffer()
-        return response
+        return response  == b'\rMHV-4 preset summary:\n'
     
 mhv4 = MHV4("/dev/ttyUSB4",9600,[0,0,0,0],3)
 print(mhv4.heartbeat())
