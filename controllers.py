@@ -100,7 +100,10 @@ class Caen:
         self.sock = sock
         while self.processing:
             if self.queue:
-                processCommand(self.queue.popleft(),self)
+                try:
+                    processCommand(self.queue.popleft(),self)
+                except Exception as e:
+                    print(e)
             else:
                 time.sleep(0.1)
 
