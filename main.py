@@ -85,7 +85,10 @@ while nbreak:
                         #print(command["action"],"added to queue")
                         device.queue.appendleft(command)
                     else:
-                        device.queue.append(command)
+                        if((command["action"] != "get_voltage" and command["action"] != "get_current") or command["device"] != "MHV4" or command["channel"] == 1):
+                            device.queue.append(command)
+
+                        
 
                     if(len(device.queue) > 10):
                         print(command["device"],"is over queued")
