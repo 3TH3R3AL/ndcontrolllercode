@@ -414,6 +414,7 @@ class MHV4:
         print(response)
         time.sleep(0.5)
         self.flush_output_buffer()
+        self.flush_input_buffer()
         return response  == b'\rMHV-4 preset summary:\n'
     
 mhv4 = MHV4("/dev/ttyUSB4",9600,[0,0,0,0],3)
