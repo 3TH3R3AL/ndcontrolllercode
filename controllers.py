@@ -251,6 +251,7 @@ class MHV4:
         self.ser.close()
 
     def send_command(self, command=""):
+        time.sleep(0.2)
         command += "\r"
         #print("sent command '", bytes(command, "utf8"), "'", sep="")
         if command == "":
