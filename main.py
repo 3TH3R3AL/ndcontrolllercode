@@ -8,7 +8,7 @@ import threading
 
 with open("config.json", "r") as f:
     config = json.loads(f.read())
-enabled = [True,True,True,False]
+enabled = [True,True,True,True]
 
 mhv4, caen1, caen2, caen3 = {},{},{},{}
 if(enabled[0]): caen1 = Caen(9600, port=config["devices"]["CAEN 1"]["port"])

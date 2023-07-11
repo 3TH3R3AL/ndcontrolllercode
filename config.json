@@ -1,37 +1,19 @@
 {
     "ports": {
         "/dev/ttyUSB0": {
-            "type": "CAEN",
-            "serial_number": 1283,
-            "voltages": [
-                0.0,
-                0.0,
-                0.0,
-                2500.0
-            ]
+            "type": "Unknown"
         },
         "/dev/ttyUSB1": {
-            "type": "MSCF-16"
+            "type": "CAEN",
+            "serial_number": 1283
         },
         "/dev/ttyUSB2": {
             "type": "CAEN",
-            "serial_number": 719,
-            "voltages": [
-                7200.0,
-                1800.0,
-                1540.0,
-                560.0
-            ]
+            "serial_number": 719
         },
         "/dev/ttyUSB3": {
             "type": "CAEN",
-            "serial_number": 89,
-            "voltages": [
-                6000.0,
-                2737.0,
-                560.0,
-                2000.0
-            ]
+            "serial_number": 89
         },
         "/dev/ttyUSB4": {
             "type": "MHV4"
@@ -49,7 +31,7 @@
         },
         "CAEN 1": {
             "controller": "Caen",
-            "port": "/dev/ttyUSB0",
+            "port": "/dev/ttyUSB1",
             "serial_number": 1283,
             "voltages": [
                 0.0,
