@@ -62,7 +62,7 @@ def fingerprint(port):
         ret['type'] = "Unknown"
         ser.close()
     return ret
-for i in range(4,5):
+for i in range(0,5):
     port = '/dev/ttyUSB' + str(i)
     config['ports'][port] = fingerprint(port)
 
