@@ -414,3 +414,5 @@ class MHV4:
         self.flush_output_buffer()
         return response
     
+mhv4 = MHV4("/dev/ttyUSB4",9600,[0,0,0,0],3)
+print(mhv4.heartbeat())
