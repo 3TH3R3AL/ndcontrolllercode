@@ -411,6 +411,7 @@ class MHV4:
             time.sleep(RAMP_INTERVAL)
     def heartbeat(self):
         response  = self.send_command("PR") == b'\rMHV-4 preset summary:\n'
+        print(response)
         time.sleep(0.5)
         self.flush_output_buffer()
         return response
