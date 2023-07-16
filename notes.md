@@ -21,3 +21,6 @@
 2. Caen 2
 3. Caen 3
 4. MHV4
+
+- Ramp on mhv4 + C!
+- Set voltage to zero
