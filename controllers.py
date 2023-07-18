@@ -383,7 +383,7 @@ class MHV4:
 
     def ramp_up(self, channel):
         voltage = 0
-        interval = self.ramp_rate * RAMP_INTERVAL
+        interval = self.ramp_rate * RAMP_INTERVAL * 10
         maximum = self.voltage_limits[channel]*10
         print(maximum)
         while True:
@@ -399,7 +399,7 @@ class MHV4:
 
     def ramp_down(self, channel):
         voltage = self.voltage_limits[channel]*10
-        interval = self.ramp_rate * RAMP_INTERVAL
+        interval = self.ramp_rate * RAMP_INTERVAL * 10
         while True:
             voltage -= interval
             if voltage < 0:
@@ -415,13 +415,13 @@ class MHV4:
         if voltage == target_voltage:
             return
         direction = 1 if voltage < target_voltage else -1
-        interval = self.ramp_rate * RAMP_INTERVAL * direction
+        interval = self.ramp_rate * RAMP_INTERVAL * direction * 10
         while True:
             voltage += interval
             if voltage * direction > target_voltage * direction:
                 voltage = target_voltage
 
-            response = self.send_command("S%d %d" % (channel, voltage))
+            self.send_command("S%d %d" % (channel, voltage))
             if voltage == target_voltage:
                 break
 
