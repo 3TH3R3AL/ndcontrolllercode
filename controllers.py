@@ -249,13 +249,7 @@ class MHV4:
         time.sleep(0.1)  # Wait 100 ms after opening the port before sending commands
         self.ser.flushInput()  # Flush the input buffer of the serial port before sending any new commands
         time.sleep(0.1)
-        self.send_command("C1")
-        time.sleep(0.1)
-        for i in range(1,4):
-            self.set_voltage(i,0)
-            time.sleep(0.1)
-            self.set_current_limit(i,0.7)
-            time.sleep(0.1)
+        
 
     
     def close(self):
@@ -268,6 +262,7 @@ class MHV4:
         #print("sent command '", bytes(command, "utf8"), "'", sep="")
         if command == "":
             return ""
+        print(command)
         self.ser.write(bytes(command, "utf8"))
         time.sleep(0.1)
         self.ser.readline()
@@ -277,6 +272,13 @@ class MHV4:
 
     def start_queue_processing(self,sock):
         self.sock = sock
+        self.send_command("C1")
+        time.sleep(0.1)
+        for i in range(1,4):
+            self.set_voltage(i,0)
+            time.sleep(0.1)
+            self.set_current_limit(i,0.7)
+            time.sleep(0.1)
         while self.processing:
             if self.queue:
                 try:
