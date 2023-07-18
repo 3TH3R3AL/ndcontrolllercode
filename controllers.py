@@ -396,7 +396,7 @@ class MHV4:
                 break
 
             time.sleep(RAMP_INTERVAL)
-
+        self.flush_input_buffer()
     def ramp_down(self, channel):
         voltage = self.voltage_limits[channel]
         interval = self.ramp_rate * RAMP_INTERVAL
@@ -409,19 +409,19 @@ class MHV4:
                 break
 
             time.sleep(RAMP_INTERVAL)
-
+            self.flush_input_buffer()
     def ramp_to(self, channel, target_voltage):
         voltage = self.get_voltage()
         if voltage == target_voltage:
             return
         direction = 1 if voltage < target_voltage else -1
-        interval = self.ramp_rate * RAMP_INTERVAL * direction * 10
+        interval = self.ramp_rate * RAMP_INTERVAL * direction 
         while True:
             voltage += interval
             if voltage * direction > target_voltage * direction:
                 voltage = target_voltage
 
-            self.send_command("S%d %d" % (channel, voltage))
+            self.send_command("S%d %d" % (channel, voltage* 10))
             if voltage == target_voltage:
                 break
 
