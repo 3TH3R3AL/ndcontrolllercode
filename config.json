@@ -25,8 +25,8 @@
             "port": "/dev/ttyUSB4",
             "voltages": [
                 5.0,
-                0.0,
-                0.0
+                5.0,
+                5.0
             ]
         },
         "CAEN 1": {
