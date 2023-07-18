@@ -331,7 +331,7 @@ class MHV4:
         return self.voltage_limit[channel]
 
     def get_current(self, channel):
-        response = self.send_command("RI %d" % channel)
+        response = self.send_command("R%d" % channel)
         linestr = response.decode("utf8")
         pattern = re.match(r".*([+-])(\d*.\d*)", linestr, re.IGNORECASE)
 
@@ -384,26 +384,26 @@ class MHV4:
     def ramp_up(self, channel):
         voltage = 0
         interval = self.ramp_rate * RAMP_INTERVAL
-        maximum = self.voltage_limits[channel]
+        maximum = self.voltage_limits[channel]*10
         while True:
             voltage += interval
             if voltage > maximum:
                 voltage = maximum
 
-            self.send_command("S%d %d" % (channel, voltage))
+            self.send_command("S%d %04d" % (channel, voltage))
             if voltage == maximum:
                 break
 
             time.sleep(RAMP_INTERVAL)
 
     def ramp_down(self, channel):
-        voltage = self.voltage_limits[channel]
+        voltage = self.voltage_limits[channel]*10
         interval = self.ramp_rate * RAMP_INTERVAL
         while True:
             voltage -= interval
             if voltage < 0:
                 voltage = 0
-            response = self.send_command("S%d %d" % (channel, voltage))
+            response = self.send_command("S%d %04d" % (channel, voltage))
             if voltage == 0:
                 break
 
