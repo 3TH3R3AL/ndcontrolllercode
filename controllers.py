@@ -302,8 +302,8 @@ class MHV4:
     def set_off(self, channel):
         if channel not in [0, 1, 2, 3, 4]:
             return
-        response = self.send_command("OFF%d" % channel)
         self.ramp_down(channel)
+        response = self.send_command("OFF%d" % channel)
 
     def get_voltage(self, channel):
         response = self.send_command("U%d" % channel)
