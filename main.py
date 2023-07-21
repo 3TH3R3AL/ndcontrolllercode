@@ -11,9 +11,9 @@ with open("config.json", "r") as f:
 enabled = [True,True,True,True]
 
 mhv4, caen1, caen2, caen3 = {},{},{},{}
-if(enabled[0]): caen1 = Caen(9600, port=config["devices"]["CAEN 1"]["port"],enabled_channels=[False,False,False,True])
-if(enabled[1]): caen2 = Caen(9600, port=config["devices"]["CAEN 2"]["port"])
-if(enabled[2]): caen3 = Caen(9600, port=config["devices"]["CAEN 3"]["port"])
+if(enabled[0]): caen1 = Caen(9600, port=config["devices"]["CAEN 1"]["port"],enabled_channels=[False,False,False,True],voltages=config["devices"]["CAEN 1"]["voltages"])
+if(enabled[1]): caen2 = Caen(9600, port=config["devices"]["CAEN 2"]["port"],voltages=config["devices"]["CAEN 2"]["voltages"])
+if(enabled[2]): caen3 = Caen(9600, port=config["devices"]["CAEN 3"]["port"],voltages=config["devices"]["CAEN 3"]["voltages"])
 if(enabled[3]): mhv4 = MHV4(
     config["devices"]["MHV4"]["port"], 9600, config["devices"]["MHV4"]["voltages"], config["devices"]["MHV4"]["ramp_rate"],enabled_channels=[0,False,False,False,True],current_limits=config["devices"]["MHV4"]["current_limits"]
 )
