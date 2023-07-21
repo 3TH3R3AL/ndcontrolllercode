@@ -52,7 +52,7 @@ def fingerprint(port):
         for device in config['devices']:
             if(config['devices'][device]['controller'] == "MHV4"):
                 config['devices'][device]['port'] = port
-                config['devices'][device]['voltages'] = [mhv4.get_voltage_preset(i) for i in range(1,4)]
+                #config['devices'][device]['voltages'] = [mhv4.get_voltage_preset(i) for i in range(1,4)]
         
         mhv4.close()
 
