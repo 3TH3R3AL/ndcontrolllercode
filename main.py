@@ -86,7 +86,8 @@ while nbreak:
                         device.queue.appendleft(command)
                     else:
                         if((command["action"] != "get_voltage" or command["action"] != "get_current") or device.enabled_channels[command["channel"]]):
-                            
+                            if(command['device'] == "MHV4"):
+                                print(command['channel'])
                             #print(command)
                             device.queue.append(command)
 
