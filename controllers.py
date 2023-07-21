@@ -161,7 +161,7 @@ class Caen:
     def get_current(self, channel):
         response = self.send_command(channel=channel, command="MON", parameter="IMON")
         linestr = response
-        pattern = re.match(r".*([+-])(\d*.\d*)", linestr, re.IGNORECASE)
+        pattern = re.match(r".*VAL:(\d*.\d*)", linestr, re.IGNORECASE)
 
         if pattern is not None:
             current = float(pattern.group(2))
