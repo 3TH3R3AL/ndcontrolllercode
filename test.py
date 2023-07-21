@@ -7,12 +7,9 @@ queue = deque()
 queue.append(1)
 queue.append(2)
 queue.append(3)
-print(len(queue))
 # Dequeue elements
 item = queue.popleft()
 print(item)  # Output: 1
-print(len(queue))
-
 item = queue.popleft()
 print(item)  # Output: 2
 

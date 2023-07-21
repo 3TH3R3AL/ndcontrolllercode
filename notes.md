@@ -22,5 +22,7 @@
 3. Caen 3
 4. MHV4
 
-- Ramp on mhv4 + C!
-- Set voltage to zero
+- Labview mhv4 1 channel
+- Labview caen 4 channels
+- Labview caen1 0-2 should be disabled
+- Email manoel about visit, friday. 

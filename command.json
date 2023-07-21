@@ -1,3 +1,3 @@
-{"device": "MHV4","action":"heartbeat"}
+{"device": "CAEN 2","action":"close"}
 |get_current,MHV4,1,40.23|
 |heartbeat,MHV4,1,40.23|
