@@ -280,7 +280,7 @@ class MHV4:
         for i in range(1,5):
             self.set_off(i)
             time.sleep(0.1)
-            self.set_current_limit(i,0.7)
+            self.set_current_limit(i,self.current_limits[i])
             time.sleep(0.1)
 
         while self.processing:
