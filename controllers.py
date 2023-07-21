@@ -246,6 +246,7 @@ class MHV4:
         self.thread = {}
         self.sock = {}
         self.enabled_channels = kwargs['enabled_channels'] if 'enabled_channels' in kwargs else [0,True,True,True,True]
+        print("MHV4: ",self.enabled_channels)
         self.ser = serial.Serial(port=self.port, baudrate=baud, timeout=1)
         time.sleep(0.1)  # Wait 100 ms after opening the port before sending commands
         self.ser.flushInput()  # Flush the input buffer of the serial port before sending any new commands
