@@ -335,7 +335,7 @@ class MHV4:
         return self.voltage_limit[channel]
 
     def get_current(self, channel):
-        response = self.send_command("R%d" % channel)
+        response = self.send_command("I%d" % channel)
         linestr = response.decode("utf8")
         pattern = re.match(r".*([+-])(\d*.\d*)", linestr, re.IGNORECASE)
 
