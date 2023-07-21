@@ -46,7 +46,7 @@ class Caen:
         self.queue = deque()
         self.thread = {}
         self.sock = {}
-        self.enabled_channels = kwargs['enabled_channels'] or [True,True,True,True]
+        self.enabled_channels = kwargs['enabled_channels'] if 'enabled_channels' in kwargs else [True,True,True,True]
         self.processing = True
         self.serial_number = self.get_serial_number()
         i = 1
@@ -245,7 +245,7 @@ class MHV4:
         self.processing = True
         self.thread = {}
         self.sock = {}
-        self.enabled_channels = kwargs['enabled_channels'] or [True,True,True,True,True]
+        self.enabled_channels = kwargs['enabled_channels'] if 'enabled_channels' in kwargs else [0,True,True,True,True]
         self.ser = serial.Serial(port=self.port, baudrate=baud, timeout=1)
         time.sleep(0.1)  # Wait 100 ms after opening the port before sending commands
         self.ser.flushInput()  # Flush the input buffer of the serial port before sending any new commands
