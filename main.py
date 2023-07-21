@@ -85,7 +85,7 @@ while nbreak:
                         #print(command["action"],"added to queue")
                         device.queue.appendleft(command)
                     else:
-                        if( device.enabled_channels[command["channel"]]  or (command["action"] != "get_voltage" or command["action"] != "get_current")):
+                        if((command["action"] != "get_voltage" or command["action"] != "get_current") or device.enabled_channels[command["channel"]]):
                             
                             #print(command)
                             device.queue.append(command)
