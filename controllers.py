@@ -278,7 +278,7 @@ class MHV4:
         self.send_command("C1")
         time.sleep(0.1)
         for i in range(1,5):
-            self.set_voltage(i,0)
+            self.set_off(i)
             time.sleep(0.1)
             self.set_current_limit(i,0.7)
             time.sleep(0.1)
