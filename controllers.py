@@ -237,13 +237,14 @@ class Caen:
 
 
 class MHV4:
-    def __init__(self, port, baud, voltage_limits, ramp_rate, **kwargs):
+    def __init__(self, port, baud, voltage_limits, ramp_rate,**kwargs):
         self.port = port
         self.voltage_limits = voltage_limits
         self.ramp_rate = ramp_rate
         self.queue = deque()
         self.processing = True
         self.thread = {}
+        self.current_limits = kwargs['current_limits'] if 'current_limits' in kwargs else [0,0.7,0.7,0.7,0.45]
         self.sock = {}
         self.enabled_channels = kwargs['enabled_channels'] if 'enabled_channels' in kwargs else [0,True,True,True,True]
         print("MHV4: ",self.enabled_channels)
@@ -276,11 +277,12 @@ class MHV4:
         self.sock = sock
         self.send_command("C1")
         time.sleep(0.1)
-        for i in range(1,4):
+        for i in range(1,5):
             self.set_voltage(i,0)
             time.sleep(0.1)
             self.set_current_limit(i,0.7)
             time.sleep(0.1)
+
         while self.processing:
             if self.queue:
                 try:

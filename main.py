@@ -15,7 +15,7 @@ if(enabled[0]): caen1 = Caen(9600, port=config["devices"]["CAEN 1"]["port"],enab
 if(enabled[1]): caen2 = Caen(9600, port=config["devices"]["CAEN 2"]["port"])
 if(enabled[2]): caen3 = Caen(9600, port=config["devices"]["CAEN 3"]["port"])
 if(enabled[3]): mhv4 = MHV4(
-    config["devices"]["MHV4"]["port"], 9600, config["devices"]["MHV4"]["voltages"], 2.5,enabled_channels=[0,False,False,False,True]
+    config["devices"]["MHV4"]["port"], 9600, config["devices"]["MHV4"]["voltages"], config["devices"]["MHV4"]["ramp_rate"],enabled_channels=[0,False,False,False,True],current_limits=config["devices"]["MHV4"]["current_limits"]
 )
 
 devices = {"CAEN 1": caen1, "CAEN 2": caen2, "CAEN 3": caen3, "MHV4": mhv4}

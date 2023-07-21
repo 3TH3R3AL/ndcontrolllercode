@@ -30,7 +30,9 @@
                 5.0,
                 50.0
             ],
+            "current_limits": [0,0.7,0.7,0.7,0.45],
             "ramp_rate": 5
+
         },
         "CAEN 1": {
             "controller": "Caen",
