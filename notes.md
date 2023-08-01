@@ -22,7 +22,9 @@
 3. Caen 3
 4. MHV4
 
-- Labview mhv4 1 channel
-- Labview caen 4 channels
-- Labview caen1 0-2 should be disabled
-- Email manoel about visit, friday. 
+- Visual for waiting for mhv4 and stuff
+- Remove debug stuff
+- Two buttons, one for each detector
+- Logging to files, so can go back and see stuff. with time 
+- Email about aug 1 potent
+- NO meet next week (25)

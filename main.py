@@ -5,7 +5,7 @@ import sys
 import socket
 import select
 import threading
-
+from log import log
 with open("config.json", "r") as f:
     config = json.loads(f.read())
 enabled = [True,True,True,True]
@@ -37,7 +37,7 @@ nbreak = 1
 def formatResponse(action,device,channel,data):
     return "|{action},{device},{channel},{data}|\r\n".format(action=str(action),price=str(action),device=str(device),channel=int(channel),data=float(data)).encode()
 
-print("server started")
+log("main.log",["server started"])
 while nbreak:
     rxfds, txfds, exfds = select.select(rxset, txset, rxset)
 
@@ -51,7 +51,7 @@ while nbreak:
                     device.thread = threading.Thread(target=device.start_queue_processing,args=(conn,))
                     device.thread.start()
 
-            print("Connection from address:", addr)
+            log("main.log",["Connection from address:", addr])
             '''
             welcome_message = "Connected to stgcontrol server\r\n"
             conn.sendall(welcome_message.encode())'''
@@ -62,14 +62,14 @@ while nbreak:
                 split = rec.split("\n")
                 if(split == ['']):
                     raise RuntimeError("Connection Closed")
-                #print(split)
+                #log("main.log",[split])
                 for data in split:
                     if(data == ""):
                         continue
                     try: 
                         command = json.loads(data)
                     except:
-                        print("Bad command: \"",data,"\"")
+                        log("main.log",["Bad command: \"",data,"\""])
 
                     device = devices[command["device"]]
                     if(device == {}):
@@ -82,20 +82,20 @@ while nbreak:
                             if(device != {}): device.close()
                         break
                     elif(command["action"] == "set_on" or command["action"] == "set_off"):
-                        #print(command["action"],"added to queue")
+                        #log("main.log",[command["action"],"added to queue"])
                         device.queue.appendleft(command)
                     else:
                         if((command["action"] != "get_voltage" and command["action"] != "get_current") or device.enabled_channels[command["channel"]]):
-                            #print(command)
+                            #log("main.log",[command])
                             device.queue.append(command)
 
                         
 
                     if(len(device.queue) > 10):
-                        print(command["device"],"is over queued")
-                #print([(len(device.queue) if device != {} else 0) for _,device in devices.items()])
+                        log("main.log",[command["device"],"is over queued"])
+                #log("main.log",[[(len(device.queue) if device != {} else 0) for _,device in devices.items()]])
             except Exception() as e:
-                print("Connection closed by remote end: ",e)
+                log("main.log",["Connection closed by remote end: ",e])
                 rxset.remove(sock)
                 sock.close()
 server.close()

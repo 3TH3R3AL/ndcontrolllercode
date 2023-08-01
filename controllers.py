@@ -3,7 +3,7 @@ import re
 import time
 from collections import deque
 import serial
-
+from log import log
 VOLTAGE_LIMIT = 100
 LOCK_TIMEOUT = 5
 RAMP_INTERVAL = 1
@@ -14,21 +14,21 @@ def formatResponse(action,device,channel,data):
 def processCommand(command,device):
     sock = device.sock
     if sock.fileno() == -1:
-        print("Socket is closed or disconnected.")
+        log("controllers.log","Socket is closed or disconnected.")
         return
     if command["action"] == "set_on":
         device.set_on(command["channel"])
-        print("set on",command["device"],command["channel"])
+        log("controllers.log",["set on",command["device"],command["channel"]])
     elif command["action"] == "set_off":
         device.set_off(command["channel"])
-        print("set off",command["device"],command["channel"])
+        log("controllers.log",["set off",command["device"],command["channel"]])
 
     elif command["action"] == "heartbeat":
         sock.send(formatResponse("heartbeat",command["device"],0,device.heartbeat()))
 
     elif command["action"] == "get_voltage":
         voltage = device.get_voltage(command["channel"])
-        #print(command["device"],command["channel"],voltage)
+        #log("controllers.log",[command["device"],command["channel"],voltage])
         sock.send(formatResponse("get_voltage",command["device"],command["channel"],voltage))
 
     elif command["action"] == "get_current":
@@ -93,7 +93,7 @@ class Caen:
         time.sleep(0.1)
         returnVal = self.ser.readline().decode()
         if "ERR" in returnVal:
-            print("Error: ", returnVal)
+            log("controllers.log",["Error: ", returnVal])
             raise Exception(returnVal)
         return returnVal  # return response from the unit
 
@@ -104,7 +104,7 @@ class Caen:
                 try:
                     processCommand(self.queue.popleft(),self)
                 except Exception as e:
-                    print(e)
+                    log("controllers.log",e)
             else:
                 time.sleep(0.1)
 
@@ -247,7 +247,7 @@ class MHV4:
         self.current_limits = kwargs['current_limits'] if 'current_limits' in kwargs else [0,0.7,0.7,0.7,0.45]
         self.sock = {}
         self.enabled_channels = kwargs['enabled_channels'] if 'enabled_channels' in kwargs else [0,True,True,True,True]
-        print("MHV4: ",self.enabled_channels)
+        log("controllers.log",["MHV4: ",self.enabled_channels])
         self.ser = serial.Serial(port=self.port, baudrate=baud, timeout=1)
         time.sleep(0.1)  # Wait 100 ms after opening the port before sending commands
         self.ser.flushInput()  # Flush the input buffer of the serial port before sending any new commands
@@ -256,16 +256,19 @@ class MHV4:
 
     
     def close(self):
+        time.sleep(0.1)
+        self.send_command("C0")
+        time.sleep(0.1)
         self.processing = False
         self.ser.close()
 
     def send_command(self, command=""):
         time.sleep(0.2)
         command += "\r"
-        #print("sent command '", bytes(command, "utf8"), "'", sep="")
+        #log("controllers.log",["sent command '", bytes(command, "utf8"), "'"], sep="")
         if command == "":
             return ""
-        print(command)
+        log("controllers.log",command)
         self.ser.write(bytes(command, "utf8"))
         time.sleep(0.1)
         self.ser.readline()
@@ -288,7 +291,7 @@ class MHV4:
                 try:
                     processCommand(self.queue.popleft(),self)
                 except Exception as e:
-                    print(e)
+                    log("controllers.log",[e])
             else:
                 time.sleep(0.1)
     def flush_input_buffer(self):
@@ -389,7 +392,7 @@ class MHV4:
         voltage = abs(self.get_voltage(channel))
         interval = self.ramp_rate * RAMP_INTERVAL
         maximum = self.voltage_limits[channel]
-        print(maximum)
+        log("controllers.log",[maximum])
         while True:
             voltage += interval
             if voltage > maximum:
@@ -409,9 +412,10 @@ class MHV4:
             if voltage < 0:
                 voltage = 0
             response = self.send_command("S%d %04d" % (channel, voltage * 10))
+            self.sock.send(formatResponse("get_voltage","MHV4",channel,voltage))
+
             if voltage == 0:
                 break
-
             time.sleep(RAMP_INTERVAL)
             self.flush_input_buffer()
     def ramp_to(self, channel, target_voltage):
@@ -426,9 +430,9 @@ class MHV4:
                 voltage = target_voltage
 
             self.send_command("S%d %d" % (channel, voltage* 10))
+            self.sock.send(formatResponse("get_voltage","MHV4",channel,voltage))
             if voltage == target_voltage:
                 break
-
             time.sleep(RAMP_INTERVAL)
     def heartbeat(self):
         response  = self.send_command("PR")
@@ -438,9 +442,9 @@ class MHV4:
         return response  == b'\rMHV-4 preset summary:\n'
     '''
 mhv4 = MHV4("/dev/ttyUSB4",9600,[0,0,0,0],3)
-print(mhv4.heartbeat())
-print(mhv4.heartbeat())
-print(mhv4.heartbeat())
-print(mhv4.heartbeat())
-print(mhv4.heartbeat())
-print(mhv4.heartbeat())'''
+log("controllers.log",[mhv4.heartbeat()])
+log("controllers.log",[mhv4.heartbeat()])
+log("controllers.log",[mhv4.heartbeat()])
+log("controllers.log",[mhv4.heartbeat()])
+log("controllers.log",[mhv4.heartbeat()])
+log("controllers.log",[mhv4.heartbeat()])'''
