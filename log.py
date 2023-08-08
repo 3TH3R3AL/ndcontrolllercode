@@ -38,5 +38,5 @@ def savePermLog():
      
     with open('perm.log','r') as f:
         logContents = f.read()
-    with open('logs/'+getTimestamp()+"_"+random.randint(0,1000)+".log",'w') as f:
+    with open('logs/'+getTimestamp()+"_"+str(random.randint(0,1000))+".log",'w') as f:
          f.write(logContents)
