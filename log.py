@@ -1,9 +1,10 @@
 import datetime
 import time
+import random
 config = {
     'controllers.log': 'temp',
     'main.log': 'temp',
-    'perm.log': 'perm'
+    'perm.log': 'temp'
 }
 
 def getTimestamp():
@@ -33,3 +34,8 @@ def startLogging(devices):
         log('perm.log',message)
                 
                
+def savePermLog():
+     
+    with open('perm.log','r') as f:
+        logContents = f.read()
+    with open('logs/'+getTimestamp()+"_"+random.randint(0,1000)+".log")

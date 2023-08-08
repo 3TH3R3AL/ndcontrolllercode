@@ -25,7 +25,7 @@ class Caen:
         self.currents = [0,0,0,0,0]
         self.thread = {}
         self.sock = {}
-        self.enabled_channels = kwargs['enabled_channels'] if 'enabled_channels' in kwargs else [True,True,True,True]
+        self.enabled_channels = kwargs['enabled_channels'] if 'enabled_channels' in kwargs else [True,True,True,True,True]
         self.processing = True
         self.serial_number = self.get_serial_number()
         i = 1
@@ -360,6 +360,8 @@ class MHV4:
             return
         if not self.enabled_channels[channel]:
             return
+        log('controllers.log',f'set Voltage of MHV4:{channel} to {voltage}')
+
         self.voltage_limits[channel] = abs(voltage)
         # MHV-4 protocol expects voltage in 0.1 V units
         #send_command("S%d %04d" % (channel, voltage * 10))

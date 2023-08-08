@@ -3,3 +3,4 @@ defaults.json
 controllers.log
 main.log
 perm.log
+./logs/*
