@@ -11,30 +11,6 @@ LOCK_PATH = "/tmp/"
 def formatResponse(action,device,channel,data):
     return "|{action},{device},{channel},{data}|\r\n".format(action=str(action),price=str(action),device=str(device),channel=int(channel),data=float(data)).encode()
 
-def processCommand(command,device):
-    sock = device.sock
-    if sock.fileno() == -1:
-        log("controllers.log","Socket is closed or disconnected.")
-        return
-    if command["action"] == "set_on":
-        device.set_on(command["channel"])
-        log("controllers.log",["set on",command["device"],command["channel"]])
-    elif command["action"] == "set_off":
-        device.set_off(command["channel"])
-        log("controllers.log",["set off",command["device"],command["channel"]])
-
-    elif command["action"] == "heartbeat":
-        sock.send(formatResponse("heartbeat",command["device"],0,device.heartbeat()))
-
-    elif command["action"] == "get_voltage":
-        voltage = device.get_voltage(command["channel"])
-        #log("controllers.log",[command["device"],command["channel"],voltage])
-        sock.send(formatResponse("get_voltage",command["device"],command["channel"],voltage))
-
-    elif command["action"] == "get_current":
-        sock.send(formatResponse("get_current",command["device"],command["channel"],device.get_current(command["channel"])))
-
-
 class Caen:
     def __init__(self, baud, **kwargs):
         # Kwargs include serial_number, port
@@ -44,6 +20,8 @@ class Caen:
         self.ser.flushInput()  # Flush the input buffer of the serial port before sending any new commands
         time.sleep(0.1)
         self.queue = deque()
+        self.voltages = [0,0,0,0,0]
+        self.currents = [0,0,0,0,0]
         self.thread = {}
         self.sock = {}
         self.enabled_channels = kwargs['enabled_channels'] if 'enabled_channels' in kwargs else [True,True,True,True]
@@ -130,6 +108,7 @@ class Caen:
 
         if pattern is not None:
             voltage = float(pattern.group(1))
+            self.voltages[channel] = voltage
             return voltage
         else:
             return 0.0
@@ -167,6 +146,7 @@ class Caen:
             current = float(pattern.group(1))
             if pattern.group(1) == "-":
                 current = -current
+            self.currents[channel] = current
             return current
         else:
             return 0.0
@@ -190,7 +170,8 @@ class Caen:
     def set_voltage(self, channel, voltage):
         if voltage > VOLTAGE_LIMIT:  # safety check limit in the library
             return
-
+        if channel not in [0, 1, 2, 3]:
+            return
         response = self.send_command(
             channel=channel,
             command="SET",
@@ -246,6 +227,9 @@ class MHV4:
         self.thread = {}
         self.current_limits = kwargs['current_limits'] if 'current_limits' in kwargs else [0,0.7,0.7,0.7,0.45]
         self.sock = {}
+        self.voltages = [0,0,0,0,0]
+        self.currents = [0,0,0,0,0]
+        self.on = [False,False,False,False,False]
         self.enabled_channels = kwargs['enabled_channels'] if 'enabled_channels' in kwargs else [0,True,True,True,True]
         log("controllers.log",["MHV4: ",self.enabled_channels])
         self.ser = serial.Serial(port=self.port, baudrate=baud, timeout=1)
@@ -268,7 +252,7 @@ class MHV4:
         #log("controllers.log",["sent command '", bytes(command, "utf8"), "'"], sep="")
         if command == "":
             return ""
-        log("controllers.log",command)
+        #log("controllers.log",command)
         self.ser.write(bytes(command, "utf8"))
         time.sleep(0.1)
         self.ser.readline()
@@ -303,12 +287,14 @@ class MHV4:
             return
         response = self.send_command("ON%d" % channel)
         self.ramp_up(channel)
+        self.on[channel] = True
 
     def set_off(self, channel):
         if channel not in [0, 1, 2, 3, 4]:
             return
         self.ramp_down(channel)
         response = self.send_command("OFF%d" % channel)
+        self.on[channel] = False
 
     def get_voltage(self, channel):
         response = self.send_command("U%d" % channel)
@@ -319,6 +305,7 @@ class MHV4:
             voltage = float(pattern.group(2))
             if pattern.group(1) == "-":
                 voltage = -voltage
+            self.voltages[channel] = voltage
             return voltage
         else:
             return 0.0
@@ -346,6 +333,7 @@ class MHV4:
             current = float(pattern.group(2))
             if pattern.group(1) == "-":
                 current = -current
+            self.currents[channel] = current
             return current
         else:
             return 0.0
@@ -369,9 +357,12 @@ class MHV4:
     def set_voltage(self, channel, voltage):
         if voltage > VOLTAGE_LIMIT:  # safety check limit in the library
             return
-
+        if not self.enabled_channels[channel]:
+            return
+        self.voltage_limits[channel] = abs(voltage)
         # MHV-4 protocol expects voltage in 0.1 V units
-        response = self.send_command("S%d %04d" % (channel, voltage * 10))
+        #send_command("S%d %04d" % (channel, voltage * 10))
+        response = self.ramp_to(voltage)
         return response.decode("utf8")
 
     def set_current_limit(self, channel, limit):
@@ -419,7 +410,7 @@ class MHV4:
             time.sleep(RAMP_INTERVAL)
             self.flush_input_buffer()
     def ramp_to(self, channel, target_voltage):
-        voltage = self.get_voltage(channel)
+        voltage = abs(self.get_voltage(channel))
         if voltage == target_voltage:
             return
         direction = 1 if voltage < target_voltage else -1
@@ -448,3 +439,30 @@ log("controllers.log",[mhv4.heartbeat()])
 log("controllers.log",[mhv4.heartbeat()])
 log("controllers.log",[mhv4.heartbeat()])
 log("controllers.log",[mhv4.heartbeat()])'''
+
+
+def processCommand(command,device):
+    sock = device.sock
+    if sock.fileno() == -1:
+        log("controllers.log","Socket is closed or disconnected.")
+        return
+    if command["action"] == "set_on":
+        device.set_on(command["channel"])
+        log("controllers.log",["set on",command["device"],command["channel"]])
+    elif command["action"] == "set_off":
+        device.set_off(command["channel"])
+        log("controllers.log",["set off",command["device"],command["channel"]])
+
+    elif command["action"] == "heartbeat":
+        sock.send(formatResponse("heartbeat",command["device"],0,device.heartbeat()))
+
+    elif command["action"] == "get_voltage":
+        voltage = device.get_voltage(command["channel"])
+        #log("controllers.log",[command["device"],command["channel"],voltage])
+        sock.send(formatResponse("get_voltage",command["device"],command["channel"],voltage))
+
+    elif command["action"] == "get_current":
+        sock.send(formatResponse("get_current",command["device"],command["channel"],device.get_current(command["channel"])))
+
+    elif command["action"] == "set_property" and command["property"] == "Voltage":
+        device.set_voltage(command["channel"],float(command["amount"]))

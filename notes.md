@@ -25,10 +25,10 @@
 - Visual for waiting for mhv4 and stuff
 - Remove debug stuff
 - Logging to files, so can go back and see stuff. with time 
-- Email about aug 1 potent
-- NO meet next week (25)
 - What is displayed on labview: voltage and current every 20 seconds or so
 - Capture content of json file, load standard setup button 
 - Make a way to set specific voltages 
 - Make tabs to hide behind the scenes
 - Double check compatibiliyt with labview 15
+- Meet next friday
+- Meet earlier next tuesday

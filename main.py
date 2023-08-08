@@ -5,7 +5,7 @@ import sys
 import socket
 import select
 import threading
-from log import log
+from log import log, startLogging
 with open("config.json", "r") as f:
     config = json.loads(f.read())
 enabled = [True,True,True,True]
@@ -19,7 +19,7 @@ if(enabled[3]): mhv4 = MHV4(
 )
 
 devices = {"CAEN 1": caen1, "CAEN 2": caen2, "CAEN 3": caen3, "MHV4": mhv4}
-MHV4_CHANNEL = 1
+MHV4_CHANNEL = 4
 caen1.set_voltage(1,100)
 TCP_IP = "0.0.0.0"
 TCP_PORT = 8880
@@ -50,6 +50,7 @@ while nbreak:
                 if(device != {}):
                     device.thread = threading.Thread(target=device.start_queue_processing,args=(conn,))
                     device.thread.start()
+            threading.Thread(target=startLogging,args=(devices,)).start
 
             log("main.log",["Connection from address:", addr])
             '''
@@ -80,16 +81,25 @@ while nbreak:
                         sock.close()
                         for _, device in devices.items():
                             if(device != {}): device.close()
+                        with open('config.json','w') as f:
+                            f.write(json.dumps(config))
                         break
-                    elif(command["action"] == "set_on" or command["action"] == "set_off"):
+                    elif command["action"] == "reset_to_defaults":
+                         with open("defaults.json", "r") as f:
+                            config = json.loads(f.read())
+                            for name, device in devices.items():
+                                for i in range(len(device.channels)):
+                                    device.set_voltage(i,float(config["devices"][name]["voltages"][i]))
+                    
+                    elif(command["action"] == "set_on" or command["action"] == "set_off" or command["action"] == "set_property"):
                         #log("main.log",[command["action"],"added to queue"])
+                        if(command["action"] == "set_property" and command['property'] == 'Voltage'):
+                            config["devices"][command["device"]]["voltages"][command["channel"]] = command['ammount']
                         device.queue.appendleft(command)
                     else:
                         if((command["action"] != "get_voltage" and command["action"] != "get_current") or device.enabled_channels[command["channel"]]):
                             #log("main.log",[command])
                             device.queue.append(command)
-
-                        
 
                     if(len(device.queue) > 10):
                         log("main.log",[command["device"],"is over queued"])
