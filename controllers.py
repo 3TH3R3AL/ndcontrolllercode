@@ -393,7 +393,7 @@ class MHV4:
                 voltage = maximum
 
             self.send_command("S%d %04d" % (channel, voltage*10))
-            self.sock.send(formatResponse("get_voltage","MHV4",channel,voltage*10))
+            self.sock.send(formatResponse("get_voltage","MHV4",channel,voltage))
 
             if voltage == maximum:
                 break
@@ -408,7 +408,7 @@ class MHV4:
             if voltage < 0:
                 voltage = 0
             response = self.send_command("S%d %04d" % (channel, voltage * 10))
-            self.sock.send(formatResponse("get_voltage","MHV4",channel,voltage*10))
+            self.sock.send(formatResponse("get_voltage","MHV4",channel,voltage))
 
             if voltage == 0:
                 break
@@ -428,7 +428,7 @@ class MHV4:
                 voltage = target_voltage
 
             self.send_command("S%d %d" % (channel, voltage* 10))
-            self.sock.send(formatResponse("get_voltage","MHV4",channel,voltage*10))
+            self.sock.send(formatResponse("get_voltage","MHV4",channel,voltage))
             if voltage == target_voltage:
                 break
             time.sleep(RAMP_INTERVAL)
