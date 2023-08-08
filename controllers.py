@@ -365,7 +365,7 @@ class MHV4:
         self.voltage_limits[channel] = abs(voltage)
         # MHV-4 protocol expects voltage in 0.1 V units
         #send_command("S%d %04d" % (channel, voltage * 10))
-        response = self.ramp_to(voltage)
+        response = self.ramp_to(channel,voltage)
         return response.decode("utf8")
 
     def set_current_limit(self, channel, limit):
