@@ -94,6 +94,7 @@ while nbreak:
                     elif(command["action"] == "set_on" or command["action"] == "set_off" or command["action"] == "set_property"):
                         #log("main.log",[command["action"],"added to queue"])
                         if(command["action"] == "set_property" and command['property'] == 'Voltage'):
+                            log('main.log',f'set Voltage of {command["device"]}:{command["channel"]} to {command["amount"]}')
                             config["devices"][command["device"]]["voltages"][command["channel"]] = command['ammount']
                         device.queue.appendleft(command)
                     else:
