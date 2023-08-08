@@ -25,7 +25,7 @@ class Caen:
         self.currents = [0,0,0,0,0]
         self.thread = {}
         self.sock = {}
-        self.enabled_channels = kwargs['enabled_channels'] if 'enabled_channels' in kwargs else [True,True,True,True,True]
+        self.enabled_channels = kwargs['enabled_channels'] if 'enabled_channels' in kwargs else [True,True,True,True,False]
         self.processing = True
         self.serial_number = self.get_serial_number()
         i = 1
