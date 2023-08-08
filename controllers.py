@@ -1,6 +1,7 @@
 #! /bin/python
 import re
 import time
+import json
 from collections import deque
 import serial
 from log import log
@@ -468,3 +469,6 @@ def processCommand(command,device):
 
     elif command["action"] == "set_property" and command["property"] == "Voltage":
         device.set_voltage(command["channel"],float(command["amount"]))
+    else:
+        log('controllers.log',f'ERR: Undefined Command: {json.dumps(command)}')
+        log('perm.log',f'ERR: Undefined Command: {json.dumps(command)}')
