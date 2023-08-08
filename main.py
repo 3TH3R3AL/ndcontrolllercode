@@ -103,8 +103,8 @@ while nbreak:
                     else:
                         if((command["action"] != "get_voltage" and command["action"] != "get_current") or device.enabled_channels[command["channel"]]):
                             #log("main.log",[command])
-                            device.queue.append(command)
-
+                            if(len(device.queue) < 10):
+                                device.queue.append(command)
                     if(len(device.queue) > 10):
                         log("main.log",[command["device"],"is over queued"])
                 #log("main.log",[[(len(device.queue) if device != {} else 0) for _,device in devices.items()]])
