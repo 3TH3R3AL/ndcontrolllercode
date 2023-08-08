@@ -9,6 +9,8 @@ config = {
 
 def getTimestamp():
      return datetime.datetime.now().strftime('%m/%d/%y %I:%M %p')
+def getFileName():
+     return datetime.datetime.now().strftime('%m-%d-%y_%I-%M_%p')+"_"+str(random.randint(0,1000))+".log"
 
 for file,value in config.items():
     if(value == 'temp'):
@@ -38,5 +40,5 @@ def savePermLog():
      
     with open('perm.log','r') as f:
         logContents = f.read()
-    with open('logs/'+getTimestamp()+"_"+str(random.randint(0,1000))+".log",'w') as f:
+    with open('logs/'+getFileName(),'w') as f:
          f.write(logContents)
