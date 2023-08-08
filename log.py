@@ -33,7 +33,7 @@ def startLogging(devices):
         for name, device in devices.items():
             if(device != {}):
                 message += f'\n{name} - Voltages: {device.voltages}, Currents: {device.currents} ' 
-        message = '\n\n'
+        message += '\n\n'
         log('perm.log',message)
                 
                
