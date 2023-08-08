@@ -91,7 +91,7 @@ while nbreak:
                          with open("defaults.json", "r") as f:
                             config = json.loads(f.read())
                             for name, device in devices.items():
-                                for i in range(len(device.channels)):
+                                for i in range(len(device.enabled_channels)):
                                     if(device.enabled_channels[i]):
                                         device.queue.appendleft({"action":"set_property","property":"Voltage","channel":i,"amount":float(config["devices"][name]["voltages"][i])})
                     
