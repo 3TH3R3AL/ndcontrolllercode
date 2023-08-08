@@ -21,14 +21,15 @@ for file,value in config.items():
 
 def log(file,message):
     with open(file,'a') as f:
-        print(getTimestamp,message,file=f)
+        print(getTimestamp(),message,file=f)
 
 def startLogging(devices):
-    time.sleep(20)
-    message = ''
-    for name, device in devices.items():
-        if(device != {}):
-            message += f'| {name} - Voltages: {device.voltages}, Currents: {device.currents} ' 
-    log('perm.log',message)
-               
+    while(True):
+        time.sleep(20)
+        message = ''
+        for name, device in devices.items():
+            if(device != {}):
+                message += f'| {name} - Voltages: {device.voltages}, Currents: {device.currents} ' 
+        log('perm.log',message)
+                
                

@@ -50,7 +50,7 @@ while nbreak:
                 if(device != {}):
                     device.thread = threading.Thread(target=device.start_queue_processing,args=(conn,))
                     device.thread.start()
-            threading.Thread(target=startLogging,args=(devices,)).start
+            threading.Thread(target=startLogging,args=(devices,)).start()
 
             log("main.log",["Connection from address:", addr])
             '''

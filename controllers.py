@@ -410,7 +410,9 @@ class MHV4:
             time.sleep(RAMP_INTERVAL)
             self.flush_input_buffer()
     def ramp_to(self, channel, target_voltage):
+        
         voltage = abs(self.get_voltage(channel))
+        log('controllers.log',f'ramping to {target_voltage} from {voltage}')
         if voltage == target_voltage:
             return
         direction = 1 if voltage < target_voltage else -1
