@@ -29,10 +29,11 @@ def log(file,message):
 def startLogging(devices):
     while(True):
         time.sleep(20)
-        message = '\n\n\n'
+        message = '\n'
         for name, device in devices.items():
             if(device != {}):
                 message += f'\n{name} - Voltages: {device.voltages}, Currents: {device.currents} ' 
+        message = '\n\n'
         log('perm.log',message)
                 
                
