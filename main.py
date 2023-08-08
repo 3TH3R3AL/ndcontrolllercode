@@ -83,6 +83,7 @@ while nbreak:
                             if(device != {}): device.close()
                         with open('config.json','w') as f:
                             f.write(json.dumps(config))
+                        with open('config.json')
                         break
                     elif command["action"] == "reset_to_defaults":
                          with open("defaults.json", "r") as f:
@@ -110,3 +111,4 @@ while nbreak:
                 rxset.remove(sock)
                 sock.close()
 server.close()
+exit(0)
