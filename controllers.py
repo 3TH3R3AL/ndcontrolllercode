@@ -370,6 +370,7 @@ class MHV4:
 
     def set_current_limit(self, channel, limit):
         response = self.send_command("T%d %04d" % (channel, limit*100))
+        self.current_limits[channel] = limit
         return response.decode("utf8")
 
     def set_voltage_limit(self, channel, limit):
@@ -473,6 +474,8 @@ def processCommand(command,device):
 
     elif command["action"] == "set_property" and command["property"] == "Voltage":
         device.set_voltage(command["channel"],float(command["amount"]))
+    elif command["action"] == "set_property" and command["property"] == "Max Current" and command["device"] == "MHV4":
+        device.set_current_limit(command["channel"],float(command["amount"]))
     else:
         log('controllers.log',f'ERR: Undefined Command: {json.dumps(command)}')
         log('perm.log',f'ERR: Undefined Command: {json.dumps(command)}')
