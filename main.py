@@ -94,7 +94,10 @@ while nbreak:
                                 for i in range(len(device.enabled_channels)):
                                     if(device.enabled_channels[i]):
                                         device.queue.appendleft({"action":"set_property","property":"Voltage","channel":i,"amount":float(config["devices"][name]["voltages"][i])})
-                    
+                                        if(name == "MHV4" and device.current_limits[i] != config["devices"][name]["current_limits"][i]):
+                                            device.queue.appendleft({"action":"set_property","property":"Max Current","channel":i,"amount":float(config["devices"][name]["current_limits"][i])})
+
+
                     elif(command["action"] == "set_on" or command["action"] == "set_off" or command["action"] == "set_property"):
                         #log("main.log",[command["action"],"added to queue"])
                         if(command["action"] == "set_property" and command['property'] == 'Voltage'):
