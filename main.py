@@ -99,6 +99,9 @@ while nbreak:
                         #log("main.log",[command["action"],"added to queue"])
                         if(command["action"] == "set_property" and command['property'] == 'Voltage'):
                             config["devices"][command["device"]]["voltages"][command["channel"]] = command['amount']
+                        elif(command["action"] == "set_property" and command['property'] == 'Max Current'):
+                            config["devices"][command["device"]]["current_limits"][command["channel"]] = command['amount']
+                        
                         device.queue.appendleft(command)
                     else:
                         if((command["action"] != "get_voltage" and command["action"] != "get_current") or device.enabled_channels[command["channel"]]):
