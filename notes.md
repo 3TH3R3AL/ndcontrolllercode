@@ -23,12 +23,11 @@
 4. MHV4
 
 - Visual for waiting for mhv4 and stuff
-- Remove debug stuff
-- Logging to files, so can go back and see stuff. with time 
-- What is displayed on labview: voltage and current every 20 seconds or so
 - Capture content of json file, load standard setup button 
 - Make a way to set specific voltages 
 - Make tabs to hide behind the scenes
 - Double check compatibiliyt with labview 15
-- Meet next friday
 - Meet earlier next tuesday
+- Set current limit MHV4
+- Bootup loading animation
+- 1pm next tuesday
