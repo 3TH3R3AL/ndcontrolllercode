@@ -1,4 +1,4 @@
-from controllers import Caen, MHV4
+from controllers import Caen, MHV4, formatResponse
 import json
 import time
 import sys
@@ -33,9 +33,6 @@ server.listen(1)
 rxset = [server]
 txset = []
 nbreak = 1
-
-def formatResponse(action,device,channel,data):
-    return "|{action},{device},{channel},{data}|\r\n".format(action=str(action),price=str(action),device=str(device),channel=int(channel),data=float(data)).encode()
 
 log("main.log",["server started"])
 while nbreak:
@@ -94,8 +91,10 @@ while nbreak:
                                 for i in range(len(device.enabled_channels)):
                                     if(device.enabled_channels[i]):
                                         device.queue.appendleft({"action":"set_property","property":"Voltage","channel":i,"amount":float(config["devices"][name]["voltages"][i])})
+                                        sock.send(formatResponse("get_preset_voltage",name,i,config["devices"][name]["voltages"][i]))
                                         if(name == "MHV4" and device.current_limits[i] != config["devices"][name]["current_limits"][i]):
                                             device.queue.appendleft({"action":"set_property","property":"Max Current","channel":i,"amount":float(config["devices"][name]["current_limits"][i])})
+                                            sock.send(formatResponse("get_preset_max_current",name,i,config["devices"][name]["current_limits"][i]))
 
 
                     elif(command["action"] == "set_on" or command["action"] == "set_off" or command["action"] == "set_property"):
