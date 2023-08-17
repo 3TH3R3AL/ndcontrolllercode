@@ -31,3 +31,6 @@
 - Set current limit MHV4
 - Bootup loading animation
 - 1pm next tuesday
+- Add preset values display to set values
+- Email or wait til saturday to talk about next tuesday
+- Keep mhv4 below 5v

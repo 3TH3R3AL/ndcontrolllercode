@@ -22,8 +22,10 @@ class Caen:
         time.sleep(0.1)
         self.queue = deque()
         self.voltages = [0,0,0,0,0]
+        self.voltage_presets = kwargs['voltage_presets'] if 'voltage_presets' in kwargs else [0,0,0,0,0]
         self.currents = [0,0,0,0,0]
         self.thread = {}
+        self.name = kwargs["name"] if 'name' in kwargs else "CAEN"
         self.sock = {}
         self.enabled_channels = kwargs['enabled_channels'] if 'enabled_channels' in kwargs else [True,True,True,True,False]
         self.processing = True
@@ -78,6 +80,9 @@ class Caen:
 
     def start_queue_processing(self,sock):
         self.sock = sock
+        for i in range(4):
+            sock.send(formatResponse("get_preset_voltage",self.name,i,self.voltage_presets[i]))
+            self.set_voltage(i,self.voltage_presets[i])
         while self.processing:
             if self.queue:
                 try:
@@ -266,6 +271,8 @@ class MHV4:
         self.send_command("C1")
         time.sleep(0.1)
         for i in range(4,5):
+            sock.send(formatResponse("get_preset_voltage","MHV4",i,self.voltage_limits[i]))
+            sock.send(formatResponse("get_preset_max_current","MHV4",i,self.current_limits[i]))
             self.set_off(i)
             time.sleep(0.1)
             self.set_current_limit(i,self.current_limits[i])
@@ -475,8 +482,12 @@ def processCommand(command,device):
 
     elif command["action"] == "set_property" and command["property"] == "Voltage":
         device.set_voltage(command["channel"],float(command["amount"]))
+        sock.send(formatResponse("get_preset_voltage",command["device"],command["channel"],command["amount"]))
+
     elif command["action"] == "set_property" and command["property"] == "Max Current" and command["device"] == "MHV4":
         device.set_current_limit(command["channel"],float(command["amount"]))
+        sock.send(formatResponse("get_preset_max_current",command["device"],command["channel"],command["amount"]))
+
     else:
         log('controllers.log',f'ERR: Undefined Command: {json.dumps(command)}')
         log('perm.log',f'ERR: Undefined Command: {json.dumps(command)}')
